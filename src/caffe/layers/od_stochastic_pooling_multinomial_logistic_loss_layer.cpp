@@ -63,13 +63,10 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
   int num = bottom[0]->num();
   int dim = bottom[0]->count() / bottom[0]->num();
   int k = this->update_k_models_.mutable_cpu_data()[0];
-  int temp = this->temp_.mutable_cpu_data()[0];
+  float temp = this->temp_.mutable_cpu_data()[0];
   float temp_decay = this->layer_param_.odsp_param().temp_decay();
-  float min_temp = 1.0 / n_pred;
+  float min_temp = 0.1;
   
-  //************OD Random Award Parameters*********************
-  //rand_select : if true, select model to update randomly. Else select 2nd best
-  //decrease_rand : anneal b over time
 
   Dtype* best = this->best_pred_.mutable_cpu_data();
   Dtype* counts = this->assign_counts_.mutable_cpu_data();
@@ -77,7 +74,8 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
   
   caffe_set(n_pred, Dtype(0), counts);
   caffe_set(n_pred, Dtype(0), losses);
-  
+  srand(static_cast<unsigned int>(time(0)));  
+  vector<float> lastprobs;
   for (int i = 0; i < num; ++i) {
 	Dtype loss_pred = 0;
 	vector< pair<Dtype, int> > scores;
@@ -90,20 +88,25 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
 		const Dtype* bottom_data = bottom[j]->cpu_data();
 		Dtype prob = std::max(
                         bottom_data[i * dim + label], Dtype(kLOG_THRESHOLD));
-		denom += exp(prob / temp);
+		denom += exp(1.0*prob / temp);
 	}
 	for (int j = 0; j< n_pred; ++j) {
 		const Dtype* bottom_data = bottom[j]->cpu_data();
-		//Dtype prob = bottom_data[i * dim + label];
 		Dtype prob = std::max(
                         bottom_data[i * dim + label], Dtype(kLOG_THRESHOLD));
-		float scaled_prob = exp(prob/temp) / denom;
+		float scaled_prob = exp(1.0*prob/temp) / denom;
 		scores.push_back(make_pair(scaled_prob, j));
 		
 	}
+	float sum = 0;
+ 	for (int l=0; l < scores.size(); l++) {
+		sum+= scores[l].first;
+	} 
 	vector<int> added;
+   	int counter = 0;
 	while(added.size() < k) {
-		float p_sum = 0.0; //helper var for determining which model to update
+       		counter++;
+		float p_sum = 0.0; 
 		float p = ((float) rand() / (RAND_MAX)); 
 		for (int l=0; l < scores.size(); l++) {
 			p_sum += scores[l].first;
@@ -137,11 +140,8 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
 		if(top.size() >= 2) {
 			top[1]->mutable_cpu_data()[i] = counts[i];
 		}
-	//ac_full[i] += counts[i];
-  	//top[2]->mutable_cpu_data()[i] = ac_full[i];
-  	//this->assign_counts_full_.mutable_cpu_data()[i] += ac_full[i];
   	this->assign_counts_full_.mutable_cpu_data()[i] += counts[i];
-  	top[2]->mutable_cpu_data()[i] = this->assign_counts_full_.mutable_cpu_data()[i];
+  	top[2]->mutable_cpu_data()[i] = this->assign_counts_full_.mutable_cpu_data()[i]; 
   }
   if (this->temp_.mutable_cpu_data()[0] * (1-temp_decay) >= min_temp) {
 	  this->temp_.mutable_cpu_data()[0] *= (1-temp_decay);
