@@ -818,7 +818,7 @@ layer {
   bottom: "label"
   odsp_param: {
 	update_k_models: 1
-	temp: 2
+	temp: 3
 	temp_decay: .001
   }
   top: "multiple-output loss"
@@ -828,7 +828,9 @@ layer {
   top: "batch-instance-counts" 
   top: "train-instance-counts"
   top: "curr-k-value" 
+  top: "curr-temp"
   loss_weight: 1
+  loss_weight: 0
   loss_weight: 0
   loss_weight: 0
   loss_weight: 0

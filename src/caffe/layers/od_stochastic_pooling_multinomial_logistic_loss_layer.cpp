@@ -46,6 +46,7 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Reshape(
 		top[2]->Reshape(bottom.size()-1,1,1,1);
 	}
    	top[3]->Reshape(1,1,1,1);
+   	top[4]->Reshape(1,1,1,1); // current temp
 	CHECK_EQ(bottom[bottom.size()-1]->channels(), 1);
 	CHECK_EQ(bottom[bottom.size()-1]->height(), 1);
 	CHECK_EQ(bottom[bottom.size()-1]->width(), 1);
@@ -64,6 +65,7 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
   int k = this->update_k_models_.mutable_cpu_data()[0];
   int temp = this->temp_.mutable_cpu_data()[0];
   float temp_decay = this->layer_param_.odsp_param().temp_decay();
+  float min_temp = 1.0 / n_pred;
   
   //************OD Random Award Parameters*********************
   //rand_select : if true, select model to update randomly. Else select 2nd best
@@ -141,8 +143,11 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
   	this->assign_counts_full_.mutable_cpu_data()[i] += counts[i];
   	top[2]->mutable_cpu_data()[i] = this->assign_counts_full_.mutable_cpu_data()[i];
   }
-  this->temp_.mutable_cpu_data()[0] *= (1-temp_decay);
+  if (this->temp_.mutable_cpu_data()[0] * (1-temp_decay) >= min_temp) {
+	  this->temp_.mutable_cpu_data()[0] *= (1-temp_decay);
+  }
   top[3]->mutable_cpu_data()[0] = k;
+  top[4]->mutable_cpu_data()[0] = this->temp_.mutable_cpu_data()[0];
   //TODO : anneal k every...?
 }
 
