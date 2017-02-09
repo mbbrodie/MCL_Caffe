@@ -1,0 +1,2978 @@
+I0126 21:28:07.701087 24753 caffe.cpp:113] Use GPU with device ID 0
+I0126 21:28:08.294332 24753 caffe.cpp:121] Starting Optimization
+I0126 21:28:08.294404 24753 solver.cpp:32] Initializing solver from parameters: 
+test_iter: 100
+test_interval: 1750
+base_lr: 0.001
+display: 100
+max_iter: 4000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.004
+snapshot: 4000
+snapshot_prefix: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/run1/mcl_cifar10_quick"
+solver_mode: GPU
+net: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/mcl_cifar10_quick_train_test.prototxt"
+I0126 21:28:08.294483 24753 solver.cpp:70] Creating training net from net file: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/mcl_cifar10_quick_train_test.prototxt
+I0126 21:28:08.295500 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer cifar
+I0126 21:28:08.295537 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 1_accuracy
+I0126 21:28:08.295558 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 2_accuracy
+I0126 21:28:08.295572 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 3_accuracy
+I0126 21:28:08.295584 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 4_accuracy
+I0126 21:28:08.295596 24753 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0126 21:28:08.295909 24753 net.cpp:42] Initializing net from parameters: 
+name: "CIFAR10_quick"
+state {
+  phase: TRAIN
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mean_file: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_train_lmdb"
+    batch_size: 350
+    backend: LMDB
+  }
+}
+layer {
+  name: "1_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "1_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_pool1"
+  type: "Pooling"
+  bottom: "1_conv1"
+  top: "1_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_relu1"
+  type: "ReLU"
+  bottom: "1_pool1"
+  top: "1_pool1"
+}
+layer {
+  name: "1_conv2"
+  type: "Convolution"
+  bottom: "1_pool1"
+  top: "1_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu2"
+  type: "ReLU"
+  bottom: "1_conv2"
+  top: "1_conv2"
+}
+layer {
+  name: "1_pool2"
+  type: "Pooling"
+  bottom: "1_conv2"
+  top: "1_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_conv3"
+  type: "Convolution"
+  bottom: "1_pool2"
+  top: "1_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu3"
+  type: "ReLU"
+  bottom: "1_conv3"
+  top: "1_conv3"
+}
+layer {
+  name: "1_pool3"
+  type: "Pooling"
+  bottom: "1_conv3"
+  top: "1_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_ip1"
+  type: "InnerProduct"
+  bottom: "1_pool3"
+  top: "1_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_ip2"
+  type: "InnerProduct"
+  bottom: "1_ip1"
+  top: "1_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_prob"
+  type: "Softmax"
+  bottom: "1_ip2"
+  top: "1_prob"
+}
+layer {
+  name: "2_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "2_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_pool1"
+  type: "Pooling"
+  bottom: "2_conv1"
+  top: "2_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_relu1"
+  type: "ReLU"
+  bottom: "2_pool1"
+  top: "2_pool1"
+}
+layer {
+  name: "2_conv2"
+  type: "Convolution"
+  bottom: "2_pool1"
+  top: "2_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu2"
+  type: "ReLU"
+  bottom: "2_conv2"
+  top: "2_conv2"
+}
+layer {
+  name: "2_pool2"
+  type: "Pooling"
+  bottom: "2_conv2"
+  top: "2_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_conv3"
+  type: "Convolution"
+  bottom: "2_pool2"
+  top: "2_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu3"
+  type: "ReLU"
+  bottom: "2_conv3"
+  top: "2_conv3"
+}
+layer {
+  name: "2_pool3"
+  type: "Pooling"
+  bottom: "2_conv3"
+  top: "2_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_ip1"
+  type: "InnerProduct"
+  bottom: "2_pool3"
+  top: "2_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_ip2"
+  type: "InnerProduct"
+  bottom: "2_ip1"
+  top: "2_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_prob"
+  type: "Softmax"
+  bottom: "2_ip2"
+  top: "2_prob"
+}
+layer {
+  name: "3_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "3_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_pool1"
+  type: "Pooling"
+  bottom: "3_conv1"
+  top: "3_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_relu1"
+  type: "ReLU"
+  bottom: "3_pool1"
+  top: "3_pool1"
+}
+layer {
+  name: "3_conv2"
+  type: "Convolution"
+  bottom: "3_pool1"
+  top: "3_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu2"
+  type: "ReLU"
+  bottom: "3_conv2"
+  top: "3_conv2"
+}
+layer {
+  name: "3_pool2"
+  type: "Pooling"
+  bottom: "3_conv2"
+  top: "3_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_conv3"
+  type: "Convolution"
+  bottom: "3_pool2"
+  top: "3_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu3"
+  type: "ReLU"
+  bottom: "3_conv3"
+  top: "3_conv3"
+}
+layer {
+  name: "3_pool3"
+  type: "Pooling"
+  bottom: "3_conv3"
+  top: "3_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_ip1"
+  type: "InnerProduct"
+  bottom: "3_pool3"
+  top: "3_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_ip2"
+  type: "InnerProduct"
+  bottom: "3_ip1"
+  top: "3_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_prob"
+  type: "Softmax"
+  bottom: "3_ip2"
+  top: "3_prob"
+}
+layer {
+  name: "4_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "4_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_pool1"
+  type: "Pooling"
+  bottom: "4_conv1"
+  top: "4_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_relu1"
+  type: "ReLU"
+  bottom: "4_pool1"
+  top: "4_pool1"
+}
+layer {
+  name: "4_conv2"
+  type: "Convolution"
+  bottom: "4_pool1"
+  top: "4_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu2"
+  type: "ReLU"
+  bottom: "4_conv2"
+  top: "4_conv2"
+}
+layer {
+  name: "4_pool2"
+  type: "Pooling"
+  bottom: "4_conv2"
+  top: "4_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_conv3"
+  type: "Convolution"
+  bottom: "4_pool2"
+  top: "4_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu3"
+  type: "ReLU"
+  bottom: "4_conv3"
+  top: "4_conv3"
+}
+layer {
+  name: "4_pool3"
+  type: "Pooling"
+  bottom: "4_conv3"
+  top: "4_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_ip1"
+  type: "InnerProduct"
+  bottom: "4_pool3"
+  top: "4_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_ip2"
+  type: "InnerProduct"
+  bottom: "4_ip1"
+  top: "4_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_prob"
+  type: "Softmax"
+  bottom: "4_ip2"
+  top: "4_prob"
+}
+layer {
+  name: "loss"
+  type: "ODMultinomialLogisticLoss"
+  bottom: "1_prob"
+  bottom: "2_prob"
+  bottom: "3_prob"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "multiple-output loss"
+  top: "batch-instance-counts"
+  top: "train-instance-counts"
+  loss_weight: 1
+  loss_weight: 0
+  loss_weight: 0
+  include {
+    phase: TRAIN
+  }
+}
+I0126 21:28:08.298333 24753 layer_factory.hpp:74] Creating layer cifar
+I0126 21:28:08.298353 24753 net.cpp:90] Creating Layer cifar
+I0126 21:28:08.298363 24753 net.cpp:368] cifar -> data
+I0126 21:28:08.298384 24753 net.cpp:368] cifar -> label
+I0126 21:28:08.298395 24753 net.cpp:120] Setting up cifar
+I0126 21:28:08.298449 24753 db.cpp:34] Opened lmdb /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_train_lmdb
+I0126 21:28:08.298490 24753 data_layer.cpp:67] output data size: 350,3,32,32
+I0126 21:28:08.298498 24753 data_transformer.cpp:22] Loading mean file from: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto
+I0126 21:28:08.299264 24753 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0126 21:28:08.299804 24753 net.cpp:127] Top shape: 350 (350)
+I0126 21:28:08.300077 24753 layer_factory.hpp:74] Creating layer data_cifar_0_split
+I0126 21:28:08.300364 24753 net.cpp:90] Creating Layer data_cifar_0_split
+I0126 21:28:08.300643 24753 net.cpp:410] data_cifar_0_split <- data
+I0126 21:28:08.300928 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_0
+I0126 21:28:08.301234 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_1
+I0126 21:28:08.301530 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_2
+I0126 21:28:08.301828 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_3
+I0126 21:28:08.302129 24753 net.cpp:120] Setting up data_cifar_0_split
+I0126 21:28:08.302429 24753 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0126 21:28:08.302731 24753 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0126 21:28:08.303035 24753 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0126 21:28:08.303342 24753 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0126 21:28:08.303357 24753 layer_factory.hpp:74] Creating layer 1_conv1
+I0126 21:28:08.303378 24753 net.cpp:90] Creating Layer 1_conv1
+I0126 21:28:08.303390 24753 net.cpp:410] 1_conv1 <- data_cifar_0_split_0
+I0126 21:28:08.303406 24753 net.cpp:368] 1_conv1 -> 1_conv1
+I0126 21:28:08.303422 24753 net.cpp:120] Setting up 1_conv1
+I0126 21:28:08.304008 24753 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0126 21:28:08.304631 24753 layer_factory.hpp:74] Creating layer 1_pool1
+I0126 21:28:08.304952 24753 net.cpp:90] Creating Layer 1_pool1
+I0126 21:28:08.305270 24753 net.cpp:410] 1_pool1 <- 1_conv1
+I0126 21:28:08.305575 24753 net.cpp:368] 1_pool1 -> 1_pool1
+I0126 21:28:08.305595 24753 net.cpp:120] Setting up 1_pool1
+I0126 21:28:08.305620 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.305634 24753 layer_factory.hpp:74] Creating layer 1_relu1
+I0126 21:28:08.305647 24753 net.cpp:90] Creating Layer 1_relu1
+I0126 21:28:08.305975 24753 net.cpp:410] 1_relu1 <- 1_pool1
+I0126 21:28:08.305992 24753 net.cpp:357] 1_relu1 -> 1_pool1 (in-place)
+I0126 21:28:08.306006 24753 net.cpp:120] Setting up 1_relu1
+I0126 21:28:08.306022 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.306035 24753 layer_factory.hpp:74] Creating layer 1_conv2
+I0126 21:28:08.306048 24753 net.cpp:90] Creating Layer 1_conv2
+I0126 21:28:08.306061 24753 net.cpp:410] 1_conv2 <- 1_pool1
+I0126 21:28:08.306076 24753 net.cpp:368] 1_conv2 -> 1_conv2
+I0126 21:28:08.306090 24753 net.cpp:120] Setting up 1_conv2
+I0126 21:28:08.306905 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.307513 24753 layer_factory.hpp:74] Creating layer 1_relu2
+I0126 21:28:08.307823 24753 net.cpp:90] Creating Layer 1_relu2
+I0126 21:28:08.308125 24753 net.cpp:410] 1_relu2 <- 1_conv2
+I0126 21:28:08.308423 24753 net.cpp:357] 1_relu2 -> 1_conv2 (in-place)
+I0126 21:28:08.308722 24753 net.cpp:120] Setting up 1_relu2
+I0126 21:28:08.308794 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.309054 24753 layer_factory.hpp:74] Creating layer 1_pool2
+I0126 21:28:08.309073 24753 net.cpp:90] Creating Layer 1_pool2
+I0126 21:28:08.309087 24753 net.cpp:410] 1_pool2 <- 1_conv2
+I0126 21:28:08.309100 24753 net.cpp:368] 1_pool2 -> 1_pool2
+I0126 21:28:08.309114 24753 net.cpp:120] Setting up 1_pool2
+I0126 21:28:08.309137 24753 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0126 21:28:08.309151 24753 layer_factory.hpp:74] Creating layer 1_conv3
+I0126 21:28:08.309167 24753 net.cpp:90] Creating Layer 1_conv3
+I0126 21:28:08.309178 24753 net.cpp:410] 1_conv3 <- 1_pool2
+I0126 21:28:08.309192 24753 net.cpp:368] 1_conv3 -> 1_conv3
+I0126 21:28:08.309211 24753 net.cpp:120] Setting up 1_conv3
+I0126 21:28:08.310811 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.310837 24753 layer_factory.hpp:74] Creating layer 1_relu3
+I0126 21:28:08.310853 24753 net.cpp:90] Creating Layer 1_relu3
+I0126 21:28:08.310864 24753 net.cpp:410] 1_relu3 <- 1_conv3
+I0126 21:28:08.310878 24753 net.cpp:357] 1_relu3 -> 1_conv3 (in-place)
+I0126 21:28:08.310891 24753 net.cpp:120] Setting up 1_relu3
+I0126 21:28:08.310904 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.310915 24753 layer_factory.hpp:74] Creating layer 1_pool3
+I0126 21:28:08.310928 24753 net.cpp:90] Creating Layer 1_pool3
+I0126 21:28:08.310940 24753 net.cpp:410] 1_pool3 <- 1_conv3
+I0126 21:28:08.310952 24753 net.cpp:368] 1_pool3 -> 1_pool3
+I0126 21:28:08.310966 24753 net.cpp:120] Setting up 1_pool3
+I0126 21:28:08.310981 24753 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0126 21:28:08.310992 24753 layer_factory.hpp:74] Creating layer 1_ip1
+I0126 21:28:08.311007 24753 net.cpp:90] Creating Layer 1_ip1
+I0126 21:28:08.311018 24753 net.cpp:410] 1_ip1 <- 1_pool3
+I0126 21:28:08.311033 24753 net.cpp:368] 1_ip1 -> 1_ip1
+I0126 21:28:08.311048 24753 net.cpp:120] Setting up 1_ip1
+I0126 21:28:08.313076 24753 net.cpp:127] Top shape: 350 64 (22400)
+I0126 21:28:08.313107 24753 layer_factory.hpp:74] Creating layer 1_ip2
+I0126 21:28:08.313120 24753 net.cpp:90] Creating Layer 1_ip2
+I0126 21:28:08.313141 24753 net.cpp:410] 1_ip2 <- 1_ip1
+I0126 21:28:08.313158 24753 net.cpp:368] 1_ip2 -> 1_ip2
+I0126 21:28:08.313172 24753 net.cpp:120] Setting up 1_ip2
+I0126 21:28:08.313211 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.313228 24753 layer_factory.hpp:74] Creating layer 1_prob
+I0126 21:28:08.313242 24753 net.cpp:90] Creating Layer 1_prob
+I0126 21:28:08.313254 24753 net.cpp:410] 1_prob <- 1_ip2
+I0126 21:28:08.313267 24753 net.cpp:368] 1_prob -> 1_prob
+I0126 21:28:08.313280 24753 net.cpp:120] Setting up 1_prob
+I0126 21:28:08.313297 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.313308 24753 layer_factory.hpp:74] Creating layer 2_conv1
+I0126 21:28:08.313323 24753 net.cpp:90] Creating Layer 2_conv1
+I0126 21:28:08.313334 24753 net.cpp:410] 2_conv1 <- data_cifar_0_split_1
+I0126 21:28:08.313347 24753 net.cpp:368] 2_conv1 -> 2_conv1
+I0126 21:28:08.313361 24753 net.cpp:120] Setting up 2_conv1
+I0126 21:28:08.313459 24753 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0126 21:28:08.313474 24753 layer_factory.hpp:74] Creating layer 2_pool1
+I0126 21:28:08.313488 24753 net.cpp:90] Creating Layer 2_pool1
+I0126 21:28:08.313498 24753 net.cpp:410] 2_pool1 <- 2_conv1
+I0126 21:28:08.313511 24753 net.cpp:368] 2_pool1 -> 2_pool1
+I0126 21:28:08.313525 24753 net.cpp:120] Setting up 2_pool1
+I0126 21:28:08.313542 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.313555 24753 layer_factory.hpp:74] Creating layer 2_relu1
+I0126 21:28:08.313567 24753 net.cpp:90] Creating Layer 2_relu1
+I0126 21:28:08.313578 24753 net.cpp:410] 2_relu1 <- 2_pool1
+I0126 21:28:08.313591 24753 net.cpp:357] 2_relu1 -> 2_pool1 (in-place)
+I0126 21:28:08.313603 24753 net.cpp:120] Setting up 2_relu1
+I0126 21:28:08.313616 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.313627 24753 layer_factory.hpp:74] Creating layer 2_conv2
+I0126 21:28:08.313640 24753 net.cpp:90] Creating Layer 2_conv2
+I0126 21:28:08.313652 24753 net.cpp:410] 2_conv2 <- 2_pool1
+I0126 21:28:08.313665 24753 net.cpp:368] 2_conv2 -> 2_conv2
+I0126 21:28:08.313679 24753 net.cpp:120] Setting up 2_conv2
+I0126 21:28:08.314482 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.314507 24753 layer_factory.hpp:74] Creating layer 2_relu2
+I0126 21:28:08.314520 24753 net.cpp:90] Creating Layer 2_relu2
+I0126 21:28:08.314532 24753 net.cpp:410] 2_relu2 <- 2_conv2
+I0126 21:28:08.314545 24753 net.cpp:357] 2_relu2 -> 2_conv2 (in-place)
+I0126 21:28:08.314558 24753 net.cpp:120] Setting up 2_relu2
+I0126 21:28:08.314571 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.314584 24753 layer_factory.hpp:74] Creating layer 2_pool2
+I0126 21:28:08.314601 24753 net.cpp:90] Creating Layer 2_pool2
+I0126 21:28:08.314620 24753 net.cpp:410] 2_pool2 <- 2_conv2
+I0126 21:28:08.314632 24753 net.cpp:368] 2_pool2 -> 2_pool2
+I0126 21:28:08.314646 24753 net.cpp:120] Setting up 2_pool2
+I0126 21:28:08.314661 24753 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0126 21:28:08.314672 24753 layer_factory.hpp:74] Creating layer 2_conv3
+I0126 21:28:08.314687 24753 net.cpp:90] Creating Layer 2_conv3
+I0126 21:28:08.314698 24753 net.cpp:410] 2_conv3 <- 2_pool2
+I0126 21:28:08.314712 24753 net.cpp:368] 2_conv3 -> 2_conv3
+I0126 21:28:08.314725 24753 net.cpp:120] Setting up 2_conv3
+I0126 21:28:08.316308 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.316329 24753 layer_factory.hpp:74] Creating layer 2_relu3
+I0126 21:28:08.316341 24753 net.cpp:90] Creating Layer 2_relu3
+I0126 21:28:08.316354 24753 net.cpp:410] 2_relu3 <- 2_conv3
+I0126 21:28:08.316366 24753 net.cpp:357] 2_relu3 -> 2_conv3 (in-place)
+I0126 21:28:08.316380 24753 net.cpp:120] Setting up 2_relu3
+I0126 21:28:08.316392 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.316404 24753 layer_factory.hpp:74] Creating layer 2_pool3
+I0126 21:28:08.316416 24753 net.cpp:90] Creating Layer 2_pool3
+I0126 21:28:08.316427 24753 net.cpp:410] 2_pool3 <- 2_conv3
+I0126 21:28:08.316440 24753 net.cpp:368] 2_pool3 -> 2_pool3
+I0126 21:28:08.316453 24753 net.cpp:120] Setting up 2_pool3
+I0126 21:28:08.316468 24753 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0126 21:28:08.316479 24753 layer_factory.hpp:74] Creating layer 2_ip1
+I0126 21:28:08.316493 24753 net.cpp:90] Creating Layer 2_ip1
+I0126 21:28:08.316504 24753 net.cpp:410] 2_ip1 <- 2_pool3
+I0126 21:28:08.316519 24753 net.cpp:368] 2_ip1 -> 2_ip1
+I0126 21:28:08.316531 24753 net.cpp:120] Setting up 2_ip1
+I0126 21:28:08.318557 24753 net.cpp:127] Top shape: 350 64 (22400)
+I0126 21:28:08.318583 24753 layer_factory.hpp:74] Creating layer 2_ip2
+I0126 21:28:08.318599 24753 net.cpp:90] Creating Layer 2_ip2
+I0126 21:28:08.318611 24753 net.cpp:410] 2_ip2 <- 2_ip1
+I0126 21:28:08.318626 24753 net.cpp:368] 2_ip2 -> 2_ip2
+I0126 21:28:08.318641 24753 net.cpp:120] Setting up 2_ip2
+I0126 21:28:08.318681 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.318696 24753 layer_factory.hpp:74] Creating layer 2_prob
+I0126 21:28:08.318709 24753 net.cpp:90] Creating Layer 2_prob
+I0126 21:28:08.318720 24753 net.cpp:410] 2_prob <- 2_ip2
+I0126 21:28:08.318734 24753 net.cpp:368] 2_prob -> 2_prob
+I0126 21:28:08.318747 24753 net.cpp:120] Setting up 2_prob
+I0126 21:28:08.318763 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.318773 24753 layer_factory.hpp:74] Creating layer 3_conv1
+I0126 21:28:08.318789 24753 net.cpp:90] Creating Layer 3_conv1
+I0126 21:28:08.318799 24753 net.cpp:410] 3_conv1 <- data_cifar_0_split_2
+I0126 21:28:08.318814 24753 net.cpp:368] 3_conv1 -> 3_conv1
+I0126 21:28:08.318827 24753 net.cpp:120] Setting up 3_conv1
+I0126 21:28:08.318923 24753 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0126 21:28:08.318938 24753 layer_factory.hpp:74] Creating layer 3_pool1
+I0126 21:28:08.318951 24753 net.cpp:90] Creating Layer 3_pool1
+I0126 21:28:08.318963 24753 net.cpp:410] 3_pool1 <- 3_conv1
+I0126 21:28:08.318975 24753 net.cpp:368] 3_pool1 -> 3_pool1
+I0126 21:28:08.318989 24753 net.cpp:120] Setting up 3_pool1
+I0126 21:28:08.319003 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.319015 24753 layer_factory.hpp:74] Creating layer 3_relu1
+I0126 21:28:08.319030 24753 net.cpp:90] Creating Layer 3_relu1
+I0126 21:28:08.319041 24753 net.cpp:410] 3_relu1 <- 3_pool1
+I0126 21:28:08.319053 24753 net.cpp:357] 3_relu1 -> 3_pool1 (in-place)
+I0126 21:28:08.319067 24753 net.cpp:120] Setting up 3_relu1
+I0126 21:28:08.319079 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.319090 24753 layer_factory.hpp:74] Creating layer 3_conv2
+I0126 21:28:08.319103 24753 net.cpp:90] Creating Layer 3_conv2
+I0126 21:28:08.319115 24753 net.cpp:410] 3_conv2 <- 3_pool1
+I0126 21:28:08.319128 24753 net.cpp:368] 3_conv2 -> 3_conv2
+I0126 21:28:08.319141 24753 net.cpp:120] Setting up 3_conv2
+I0126 21:28:08.319943 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.319967 24753 layer_factory.hpp:74] Creating layer 3_relu2
+I0126 21:28:08.319982 24753 net.cpp:90] Creating Layer 3_relu2
+I0126 21:28:08.319993 24753 net.cpp:410] 3_relu2 <- 3_conv2
+I0126 21:28:08.320006 24753 net.cpp:357] 3_relu2 -> 3_conv2 (in-place)
+I0126 21:28:08.320020 24753 net.cpp:120] Setting up 3_relu2
+I0126 21:28:08.320034 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.320044 24753 layer_factory.hpp:74] Creating layer 3_pool2
+I0126 21:28:08.320057 24753 net.cpp:90] Creating Layer 3_pool2
+I0126 21:28:08.320068 24753 net.cpp:410] 3_pool2 <- 3_conv2
+I0126 21:28:08.320081 24753 net.cpp:368] 3_pool2 -> 3_pool2
+I0126 21:28:08.320094 24753 net.cpp:120] Setting up 3_pool2
+I0126 21:28:08.320108 24753 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0126 21:28:08.320119 24753 layer_factory.hpp:74] Creating layer 3_conv3
+I0126 21:28:08.320137 24753 net.cpp:90] Creating Layer 3_conv3
+I0126 21:28:08.320148 24753 net.cpp:410] 3_conv3 <- 3_pool2
+I0126 21:28:08.320163 24753 net.cpp:368] 3_conv3 -> 3_conv3
+I0126 21:28:08.320175 24753 net.cpp:120] Setting up 3_conv3
+I0126 21:28:08.321768 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.321794 24753 layer_factory.hpp:74] Creating layer 3_relu3
+I0126 21:28:08.321808 24753 net.cpp:90] Creating Layer 3_relu3
+I0126 21:28:08.321820 24753 net.cpp:410] 3_relu3 <- 3_conv3
+I0126 21:28:08.321833 24753 net.cpp:357] 3_relu3 -> 3_conv3 (in-place)
+I0126 21:28:08.321847 24753 net.cpp:120] Setting up 3_relu3
+I0126 21:28:08.321861 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.321871 24753 layer_factory.hpp:74] Creating layer 3_pool3
+I0126 21:28:08.321885 24753 net.cpp:90] Creating Layer 3_pool3
+I0126 21:28:08.321897 24753 net.cpp:410] 3_pool3 <- 3_conv3
+I0126 21:28:08.321910 24753 net.cpp:368] 3_pool3 -> 3_pool3
+I0126 21:28:08.321923 24753 net.cpp:120] Setting up 3_pool3
+I0126 21:28:08.321938 24753 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0126 21:28:08.321949 24753 layer_factory.hpp:74] Creating layer 3_ip1
+I0126 21:28:08.321962 24753 net.cpp:90] Creating Layer 3_ip1
+I0126 21:28:08.321974 24753 net.cpp:410] 3_ip1 <- 3_pool3
+I0126 21:28:08.321987 24753 net.cpp:368] 3_ip1 -> 3_ip1
+I0126 21:28:08.322001 24753 net.cpp:120] Setting up 3_ip1
+I0126 21:28:08.324031 24753 net.cpp:127] Top shape: 350 64 (22400)
+I0126 21:28:08.324056 24753 layer_factory.hpp:74] Creating layer 3_ip2
+I0126 21:28:08.324079 24753 net.cpp:90] Creating Layer 3_ip2
+I0126 21:28:08.324093 24753 net.cpp:410] 3_ip2 <- 3_ip1
+I0126 21:28:08.324110 24753 net.cpp:368] 3_ip2 -> 3_ip2
+I0126 21:28:08.324128 24753 net.cpp:120] Setting up 3_ip2
+I0126 21:28:08.324173 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.324193 24753 layer_factory.hpp:74] Creating layer 3_prob
+I0126 21:28:08.324208 24753 net.cpp:90] Creating Layer 3_prob
+I0126 21:28:08.324221 24753 net.cpp:410] 3_prob <- 3_ip2
+I0126 21:28:08.324235 24753 net.cpp:368] 3_prob -> 3_prob
+I0126 21:28:08.324254 24753 net.cpp:120] Setting up 3_prob
+I0126 21:28:08.324272 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.324285 24753 layer_factory.hpp:74] Creating layer 4_conv1
+I0126 21:28:08.324304 24753 net.cpp:90] Creating Layer 4_conv1
+I0126 21:28:08.324319 24753 net.cpp:410] 4_conv1 <- data_cifar_0_split_3
+I0126 21:28:08.324336 24753 net.cpp:368] 4_conv1 -> 4_conv1
+I0126 21:28:08.324352 24753 net.cpp:120] Setting up 4_conv1
+I0126 21:28:08.324455 24753 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0126 21:28:08.324472 24753 layer_factory.hpp:74] Creating layer 4_pool1
+I0126 21:28:08.324487 24753 net.cpp:90] Creating Layer 4_pool1
+I0126 21:28:08.324501 24753 net.cpp:410] 4_pool1 <- 4_conv1
+I0126 21:28:08.324514 24753 net.cpp:368] 4_pool1 -> 4_pool1
+I0126 21:28:08.324529 24753 net.cpp:120] Setting up 4_pool1
+I0126 21:28:08.324546 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.324558 24753 layer_factory.hpp:74] Creating layer 4_relu1
+I0126 21:28:08.324574 24753 net.cpp:90] Creating Layer 4_relu1
+I0126 21:28:08.324590 24753 net.cpp:410] 4_relu1 <- 4_pool1
+I0126 21:28:08.324614 24753 net.cpp:357] 4_relu1 -> 4_pool1 (in-place)
+I0126 21:28:08.324627 24753 net.cpp:120] Setting up 4_relu1
+I0126 21:28:08.324640 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.324651 24753 layer_factory.hpp:74] Creating layer 4_conv2
+I0126 21:28:08.324666 24753 net.cpp:90] Creating Layer 4_conv2
+I0126 21:28:08.324676 24753 net.cpp:410] 4_conv2 <- 4_pool1
+I0126 21:28:08.324690 24753 net.cpp:368] 4_conv2 -> 4_conv2
+I0126 21:28:08.324703 24753 net.cpp:120] Setting up 4_conv2
+I0126 21:28:08.325511 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.325536 24753 layer_factory.hpp:74] Creating layer 4_relu2
+I0126 21:28:08.325549 24753 net.cpp:90] Creating Layer 4_relu2
+I0126 21:28:08.325562 24753 net.cpp:410] 4_relu2 <- 4_conv2
+I0126 21:28:08.325574 24753 net.cpp:357] 4_relu2 -> 4_conv2 (in-place)
+I0126 21:28:08.325587 24753 net.cpp:120] Setting up 4_relu2
+I0126 21:28:08.325600 24753 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0126 21:28:08.325611 24753 layer_factory.hpp:74] Creating layer 4_pool2
+I0126 21:28:08.325625 24753 net.cpp:90] Creating Layer 4_pool2
+I0126 21:28:08.325637 24753 net.cpp:410] 4_pool2 <- 4_conv2
+I0126 21:28:08.325650 24753 net.cpp:368] 4_pool2 -> 4_pool2
+I0126 21:28:08.325664 24753 net.cpp:120] Setting up 4_pool2
+I0126 21:28:08.325677 24753 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0126 21:28:08.325688 24753 layer_factory.hpp:74] Creating layer 4_conv3
+I0126 21:28:08.325703 24753 net.cpp:90] Creating Layer 4_conv3
+I0126 21:28:08.325714 24753 net.cpp:410] 4_conv3 <- 4_pool2
+I0126 21:28:08.325727 24753 net.cpp:368] 4_conv3 -> 4_conv3
+I0126 21:28:08.325742 24753 net.cpp:120] Setting up 4_conv3
+I0126 21:28:08.327327 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.327353 24753 layer_factory.hpp:74] Creating layer 4_relu3
+I0126 21:28:08.327370 24753 net.cpp:90] Creating Layer 4_relu3
+I0126 21:28:08.327383 24753 net.cpp:410] 4_relu3 <- 4_conv3
+I0126 21:28:08.327399 24753 net.cpp:357] 4_relu3 -> 4_conv3 (in-place)
+I0126 21:28:08.327414 24753 net.cpp:120] Setting up 4_relu3
+I0126 21:28:08.327428 24753 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0126 21:28:08.327442 24753 layer_factory.hpp:74] Creating layer 4_pool3
+I0126 21:28:08.327458 24753 net.cpp:90] Creating Layer 4_pool3
+I0126 21:28:08.327472 24753 net.cpp:410] 4_pool3 <- 4_conv3
+I0126 21:28:08.327488 24753 net.cpp:368] 4_pool3 -> 4_pool3
+I0126 21:28:08.327505 24753 net.cpp:120] Setting up 4_pool3
+I0126 21:28:08.327522 24753 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0126 21:28:08.327536 24753 layer_factory.hpp:74] Creating layer 4_ip1
+I0126 21:28:08.327554 24753 net.cpp:90] Creating Layer 4_ip1
+I0126 21:28:08.327569 24753 net.cpp:410] 4_ip1 <- 4_pool3
+I0126 21:28:08.327585 24753 net.cpp:368] 4_ip1 -> 4_ip1
+I0126 21:28:08.327602 24753 net.cpp:120] Setting up 4_ip1
+I0126 21:28:08.329679 24753 net.cpp:127] Top shape: 350 64 (22400)
+I0126 21:28:08.329702 24753 layer_factory.hpp:74] Creating layer 4_ip2
+I0126 21:28:08.329720 24753 net.cpp:90] Creating Layer 4_ip2
+I0126 21:28:08.329731 24753 net.cpp:410] 4_ip2 <- 4_ip1
+I0126 21:28:08.329746 24753 net.cpp:368] 4_ip2 -> 4_ip2
+I0126 21:28:08.329761 24753 net.cpp:120] Setting up 4_ip2
+I0126 21:28:08.329802 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.329816 24753 layer_factory.hpp:74] Creating layer 4_prob
+I0126 21:28:08.329828 24753 net.cpp:90] Creating Layer 4_prob
+I0126 21:28:08.329840 24753 net.cpp:410] 4_prob <- 4_ip2
+I0126 21:28:08.329852 24753 net.cpp:368] 4_prob -> 4_prob
+I0126 21:28:08.329866 24753 net.cpp:120] Setting up 4_prob
+I0126 21:28:08.329881 24753 net.cpp:127] Top shape: 350 10 (3500)
+I0126 21:28:08.329893 24753 layer_factory.hpp:74] Creating layer loss
+I0126 21:28:08.329910 24753 net.cpp:90] Creating Layer loss
+I0126 21:28:08.329921 24753 net.cpp:410] loss <- 1_prob
+I0126 21:28:08.329932 24753 net.cpp:410] loss <- 2_prob
+I0126 21:28:08.329944 24753 net.cpp:410] loss <- 3_prob
+I0126 21:28:08.329957 24753 net.cpp:410] loss <- 4_prob
+I0126 21:28:08.329972 24753 net.cpp:410] loss <- label
+I0126 21:28:08.329993 24753 net.cpp:368] loss -> multiple-output loss
+I0126 21:28:08.330008 24753 net.cpp:368] loss -> batch-instance-counts
+I0126 21:28:08.330024 24753 net.cpp:368] loss -> train-instance-counts
+I0126 21:28:08.330039 24753 net.cpp:120] Setting up loss
+I0126 21:28:08.330060 24753 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0126 21:28:08.330071 24753 net.cpp:129]     with loss weight 1
+I0126 21:28:08.330096 24753 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0126 21:28:08.330107 24753 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0126 21:28:08.330119 24753 net.cpp:192] loss needs backward computation.
+I0126 21:28:08.330132 24753 net.cpp:192] 4_prob needs backward computation.
+I0126 21:28:08.330142 24753 net.cpp:192] 4_ip2 needs backward computation.
+I0126 21:28:08.330153 24753 net.cpp:192] 4_ip1 needs backward computation.
+I0126 21:28:08.330164 24753 net.cpp:192] 4_pool3 needs backward computation.
+I0126 21:28:08.330175 24753 net.cpp:192] 4_relu3 needs backward computation.
+I0126 21:28:08.330186 24753 net.cpp:192] 4_conv3 needs backward computation.
+I0126 21:28:08.330198 24753 net.cpp:192] 4_pool2 needs backward computation.
+I0126 21:28:08.330209 24753 net.cpp:192] 4_relu2 needs backward computation.
+I0126 21:28:08.330219 24753 net.cpp:192] 4_conv2 needs backward computation.
+I0126 21:28:08.330230 24753 net.cpp:192] 4_relu1 needs backward computation.
+I0126 21:28:08.330241 24753 net.cpp:192] 4_pool1 needs backward computation.
+I0126 21:28:08.330252 24753 net.cpp:192] 4_conv1 needs backward computation.
+I0126 21:28:08.330265 24753 net.cpp:192] 3_prob needs backward computation.
+I0126 21:28:08.330276 24753 net.cpp:192] 3_ip2 needs backward computation.
+I0126 21:28:08.330287 24753 net.cpp:192] 3_ip1 needs backward computation.
+I0126 21:28:08.330298 24753 net.cpp:192] 3_pool3 needs backward computation.
+I0126 21:28:08.330309 24753 net.cpp:192] 3_relu3 needs backward computation.
+I0126 21:28:08.330320 24753 net.cpp:192] 3_conv3 needs backward computation.
+I0126 21:28:08.330332 24753 net.cpp:192] 3_pool2 needs backward computation.
+I0126 21:28:08.330343 24753 net.cpp:192] 3_relu2 needs backward computation.
+I0126 21:28:08.330354 24753 net.cpp:192] 3_conv2 needs backward computation.
+I0126 21:28:08.330365 24753 net.cpp:192] 3_relu1 needs backward computation.
+I0126 21:28:08.330375 24753 net.cpp:192] 3_pool1 needs backward computation.
+I0126 21:28:08.330387 24753 net.cpp:192] 3_conv1 needs backward computation.
+I0126 21:28:08.330399 24753 net.cpp:192] 2_prob needs backward computation.
+I0126 21:28:08.330410 24753 net.cpp:192] 2_ip2 needs backward computation.
+I0126 21:28:08.330420 24753 net.cpp:192] 2_ip1 needs backward computation.
+I0126 21:28:08.330432 24753 net.cpp:192] 2_pool3 needs backward computation.
+I0126 21:28:08.330443 24753 net.cpp:192] 2_relu3 needs backward computation.
+I0126 21:28:08.330453 24753 net.cpp:192] 2_conv3 needs backward computation.
+I0126 21:28:08.330466 24753 net.cpp:192] 2_pool2 needs backward computation.
+I0126 21:28:08.330476 24753 net.cpp:192] 2_relu2 needs backward computation.
+I0126 21:28:08.330487 24753 net.cpp:192] 2_conv2 needs backward computation.
+I0126 21:28:08.330497 24753 net.cpp:192] 2_relu1 needs backward computation.
+I0126 21:28:08.330508 24753 net.cpp:192] 2_pool1 needs backward computation.
+I0126 21:28:08.330521 24753 net.cpp:192] 2_conv1 needs backward computation.
+I0126 21:28:08.330534 24753 net.cpp:192] 1_prob needs backward computation.
+I0126 21:28:08.330546 24753 net.cpp:192] 1_ip2 needs backward computation.
+I0126 21:28:08.330559 24753 net.cpp:192] 1_ip1 needs backward computation.
+I0126 21:28:08.330571 24753 net.cpp:192] 1_pool3 needs backward computation.
+I0126 21:28:08.330585 24753 net.cpp:192] 1_relu3 needs backward computation.
+I0126 21:28:08.330597 24753 net.cpp:192] 1_conv3 needs backward computation.
+I0126 21:28:08.330610 24753 net.cpp:192] 1_pool2 needs backward computation.
+I0126 21:28:08.330623 24753 net.cpp:192] 1_relu2 needs backward computation.
+I0126 21:28:08.330636 24753 net.cpp:192] 1_conv2 needs backward computation.
+I0126 21:28:08.330652 24753 net.cpp:192] 1_relu1 needs backward computation.
+I0126 21:28:08.330668 24753 net.cpp:192] 1_pool1 needs backward computation.
+I0126 21:28:08.330679 24753 net.cpp:192] 1_conv1 needs backward computation.
+I0126 21:28:08.330691 24753 net.cpp:194] data_cifar_0_split does not need backward computation.
+I0126 21:28:08.330703 24753 net.cpp:194] cifar does not need backward computation.
+I0126 21:28:08.330714 24753 net.cpp:235] This network produces output batch-instance-counts
+I0126 21:28:08.330725 24753 net.cpp:235] This network produces output multiple-output loss
+I0126 21:28:08.330739 24753 net.cpp:235] This network produces output train-instance-counts
+I0126 21:28:08.330778 24753 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0126 21:28:08.330797 24753 net.cpp:247] Network initialization done.
+I0126 21:28:08.330808 24753 net.cpp:248] Memory required for data: 452055848
+I0126 21:28:08.332062 24753 solver.cpp:154] Creating test net (#0) specified by net file: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/mcl_cifar10_quick_train_test.prototxt
+I0126 21:28:08.332142 24753 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer cifar
+I0126 21:28:08.332186 24753 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer loss
+I0126 21:28:08.332494 24753 net.cpp:42] Initializing net from parameters: 
+name: "CIFAR10_quick"
+state {
+  phase: TEST
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mean_file: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_test_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "1_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "1_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_pool1"
+  type: "Pooling"
+  bottom: "1_conv1"
+  top: "1_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_relu1"
+  type: "ReLU"
+  bottom: "1_pool1"
+  top: "1_pool1"
+}
+layer {
+  name: "1_conv2"
+  type: "Convolution"
+  bottom: "1_pool1"
+  top: "1_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu2"
+  type: "ReLU"
+  bottom: "1_conv2"
+  top: "1_conv2"
+}
+layer {
+  name: "1_pool2"
+  type: "Pooling"
+  bottom: "1_conv2"
+  top: "1_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_conv3"
+  type: "Convolution"
+  bottom: "1_pool2"
+  top: "1_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu3"
+  type: "ReLU"
+  bottom: "1_conv3"
+  top: "1_conv3"
+}
+layer {
+  name: "1_pool3"
+  type: "Pooling"
+  bottom: "1_conv3"
+  top: "1_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_ip1"
+  type: "InnerProduct"
+  bottom: "1_pool3"
+  top: "1_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_ip2"
+  type: "InnerProduct"
+  bottom: "1_ip1"
+  top: "1_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_prob"
+  type: "Softmax"
+  bottom: "1_ip2"
+  top: "1_prob"
+}
+layer {
+  name: "2_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "2_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_pool1"
+  type: "Pooling"
+  bottom: "2_conv1"
+  top: "2_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_relu1"
+  type: "ReLU"
+  bottom: "2_pool1"
+  top: "2_pool1"
+}
+layer {
+  name: "2_conv2"
+  type: "Convolution"
+  bottom: "2_pool1"
+  top: "2_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu2"
+  type: "ReLU"
+  bottom: "2_conv2"
+  top: "2_conv2"
+}
+layer {
+  name: "2_pool2"
+  type: "Pooling"
+  bottom: "2_conv2"
+  top: "2_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_conv3"
+  type: "Convolution"
+  bottom: "2_pool2"
+  top: "2_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu3"
+  type: "ReLU"
+  bottom: "2_conv3"
+  top: "2_conv3"
+}
+layer {
+  name: "2_pool3"
+  type: "Pooling"
+  bottom: "2_conv3"
+  top: "2_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_ip1"
+  type: "InnerProduct"
+  bottom: "2_pool3"
+  top: "2_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_ip2"
+  type: "InnerProduct"
+  bottom: "2_ip1"
+  top: "2_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_prob"
+  type: "Softmax"
+  bottom: "2_ip2"
+  top: "2_prob"
+}
+layer {
+  name: "3_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "3_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_pool1"
+  type: "Pooling"
+  bottom: "3_conv1"
+  top: "3_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_relu1"
+  type: "ReLU"
+  bottom: "3_pool1"
+  top: "3_pool1"
+}
+layer {
+  name: "3_conv2"
+  type: "Convolution"
+  bottom: "3_pool1"
+  top: "3_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu2"
+  type: "ReLU"
+  bottom: "3_conv2"
+  top: "3_conv2"
+}
+layer {
+  name: "3_pool2"
+  type: "Pooling"
+  bottom: "3_conv2"
+  top: "3_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_conv3"
+  type: "Convolution"
+  bottom: "3_pool2"
+  top: "3_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu3"
+  type: "ReLU"
+  bottom: "3_conv3"
+  top: "3_conv3"
+}
+layer {
+  name: "3_pool3"
+  type: "Pooling"
+  bottom: "3_conv3"
+  top: "3_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_ip1"
+  type: "InnerProduct"
+  bottom: "3_pool3"
+  top: "3_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_ip2"
+  type: "InnerProduct"
+  bottom: "3_ip1"
+  top: "3_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_prob"
+  type: "Softmax"
+  bottom: "3_ip2"
+  top: "3_prob"
+}
+layer {
+  name: "4_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "4_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_pool1"
+  type: "Pooling"
+  bottom: "4_conv1"
+  top: "4_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_relu1"
+  type: "ReLU"
+  bottom: "4_pool1"
+  top: "4_pool1"
+}
+layer {
+  name: "4_conv2"
+  type: "Convolution"
+  bottom: "4_pool1"
+  top: "4_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu2"
+  type: "ReLU"
+  bottom: "4_conv2"
+  top: "4_conv2"
+}
+layer {
+  name: "4_pool2"
+  type: "Pooling"
+  bottom: "4_conv2"
+  top: "4_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_conv3"
+  type: "Convolution"
+  bottom: "4_pool2"
+  top: "4_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu3"
+  type: "ReLU"
+  bottom: "4_conv3"
+  top: "4_conv3"
+}
+layer {
+  name: "4_pool3"
+  type: "Pooling"
+  bottom: "4_conv3"
+  top: "4_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_ip1"
+  type: "InnerProduct"
+  bottom: "4_pool3"
+  top: "4_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_ip2"
+  type: "InnerProduct"
+  bottom: "4_ip1"
+  top: "4_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_prob"
+  type: "Softmax"
+  bottom: "4_ip2"
+  top: "4_prob"
+}
+layer {
+  name: "1_accuracy"
+  type: "Accuracy"
+  bottom: "1_prob"
+  bottom: "label"
+  top: "1_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "2_accuracy"
+  type: "Accuracy"
+  bottom: "2_prob"
+  bottom: "label"
+  top: "2_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "3_accuracy"
+  type: "Accuracy"
+  bottom: "3_prob"
+  bottom: "label"
+  top: "3_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "4_accuracy"
+  type: "Accuracy"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "4_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "accuracy"
+  type: "OracleAccuracy"
+  bottom: "1_prob"
+  bottom: "2_prob"
+  bottom: "3_prob"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "oracle accuracy"
+  include {
+    phase: TEST
+  }
+}
+I0126 21:28:08.334868 24753 layer_factory.hpp:74] Creating layer cifar
+I0126 21:28:08.334895 24753 net.cpp:90] Creating Layer cifar
+I0126 21:28:08.334909 24753 net.cpp:368] cifar -> data
+I0126 21:28:08.334928 24753 net.cpp:368] cifar -> label
+I0126 21:28:08.334944 24753 net.cpp:120] Setting up cifar
+I0126 21:28:08.334980 24753 db.cpp:34] Opened lmdb /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_test_lmdb
+I0126 21:28:08.335013 24753 data_layer.cpp:67] output data size: 100,3,32,32
+I0126 21:28:08.335029 24753 data_transformer.cpp:22] Loading mean file from: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto
+I0126 21:28:08.335407 24753 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0126 21:28:08.335427 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335439 24753 layer_factory.hpp:74] Creating layer data_cifar_0_split
+I0126 21:28:08.335455 24753 net.cpp:90] Creating Layer data_cifar_0_split
+I0126 21:28:08.335467 24753 net.cpp:410] data_cifar_0_split <- data
+I0126 21:28:08.335480 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_0
+I0126 21:28:08.335495 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_1
+I0126 21:28:08.335510 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_2
+I0126 21:28:08.335525 24753 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_3
+I0126 21:28:08.335537 24753 net.cpp:120] Setting up data_cifar_0_split
+I0126 21:28:08.335552 24753 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0126 21:28:08.335564 24753 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0126 21:28:08.335577 24753 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0126 21:28:08.335589 24753 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0126 21:28:08.335600 24753 layer_factory.hpp:74] Creating layer label_cifar_1_split
+I0126 21:28:08.335613 24753 net.cpp:90] Creating Layer label_cifar_1_split
+I0126 21:28:08.335624 24753 net.cpp:410] label_cifar_1_split <- label
+I0126 21:28:08.335638 24753 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_0
+I0126 21:28:08.335652 24753 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_1
+I0126 21:28:08.335666 24753 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_2
+I0126 21:28:08.335680 24753 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_3
+I0126 21:28:08.335695 24753 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_4
+I0126 21:28:08.335707 24753 net.cpp:120] Setting up label_cifar_1_split
+I0126 21:28:08.335721 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335733 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335746 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335757 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335769 24753 net.cpp:127] Top shape: 100 (100)
+I0126 21:28:08.335780 24753 layer_factory.hpp:74] Creating layer 1_conv1
+I0126 21:28:08.335794 24753 net.cpp:90] Creating Layer 1_conv1
+I0126 21:28:08.335805 24753 net.cpp:410] 1_conv1 <- data_cifar_0_split_0
+I0126 21:28:08.335819 24753 net.cpp:368] 1_conv1 -> 1_conv1
+I0126 21:28:08.335834 24753 net.cpp:120] Setting up 1_conv1
+I0126 21:28:08.335927 24753 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0126 21:28:08.335944 24753 layer_factory.hpp:74] Creating layer 1_pool1
+I0126 21:28:08.335958 24753 net.cpp:90] Creating Layer 1_pool1
+I0126 21:28:08.335970 24753 net.cpp:410] 1_pool1 <- 1_conv1
+I0126 21:28:08.335984 24753 net.cpp:368] 1_pool1 -> 1_pool1
+I0126 21:28:08.335997 24753 net.cpp:120] Setting up 1_pool1
+I0126 21:28:08.336012 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.336024 24753 layer_factory.hpp:74] Creating layer 1_relu1
+I0126 21:28:08.336036 24753 net.cpp:90] Creating Layer 1_relu1
+I0126 21:28:08.336047 24753 net.cpp:410] 1_relu1 <- 1_pool1
+I0126 21:28:08.336061 24753 net.cpp:357] 1_relu1 -> 1_pool1 (in-place)
+I0126 21:28:08.336072 24753 net.cpp:120] Setting up 1_relu1
+I0126 21:28:08.336086 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.336097 24753 layer_factory.hpp:74] Creating layer 1_conv2
+I0126 21:28:08.336110 24753 net.cpp:90] Creating Layer 1_conv2
+I0126 21:28:08.336122 24753 net.cpp:410] 1_conv2 <- 1_pool1
+I0126 21:28:08.336141 24753 net.cpp:368] 1_conv2 -> 1_conv2
+I0126 21:28:08.336161 24753 net.cpp:120] Setting up 1_conv2
+I0126 21:28:08.336959 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.336978 24753 layer_factory.hpp:74] Creating layer 1_relu2
+I0126 21:28:08.336992 24753 net.cpp:90] Creating Layer 1_relu2
+I0126 21:28:08.337003 24753 net.cpp:410] 1_relu2 <- 1_conv2
+I0126 21:28:08.337015 24753 net.cpp:357] 1_relu2 -> 1_conv2 (in-place)
+I0126 21:28:08.337028 24753 net.cpp:120] Setting up 1_relu2
+I0126 21:28:08.337040 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.337052 24753 layer_factory.hpp:74] Creating layer 1_pool2
+I0126 21:28:08.337066 24753 net.cpp:90] Creating Layer 1_pool2
+I0126 21:28:08.337077 24753 net.cpp:410] 1_pool2 <- 1_conv2
+I0126 21:28:08.337090 24753 net.cpp:368] 1_pool2 -> 1_pool2
+I0126 21:28:08.337103 24753 net.cpp:120] Setting up 1_pool2
+I0126 21:28:08.337119 24753 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0126 21:28:08.337141 24753 layer_factory.hpp:74] Creating layer 1_conv3
+I0126 21:28:08.337158 24753 net.cpp:90] Creating Layer 1_conv3
+I0126 21:28:08.337172 24753 net.cpp:410] 1_conv3 <- 1_pool2
+I0126 21:28:08.337188 24753 net.cpp:368] 1_conv3 -> 1_conv3
+I0126 21:28:08.337205 24753 net.cpp:120] Setting up 1_conv3
+I0126 21:28:08.338793 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.338815 24753 layer_factory.hpp:74] Creating layer 1_relu3
+I0126 21:28:08.338830 24753 net.cpp:90] Creating Layer 1_relu3
+I0126 21:28:08.338841 24753 net.cpp:410] 1_relu3 <- 1_conv3
+I0126 21:28:08.338855 24753 net.cpp:357] 1_relu3 -> 1_conv3 (in-place)
+I0126 21:28:08.338867 24753 net.cpp:120] Setting up 1_relu3
+I0126 21:28:08.338881 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.338891 24753 layer_factory.hpp:74] Creating layer 1_pool3
+I0126 21:28:08.338904 24753 net.cpp:90] Creating Layer 1_pool3
+I0126 21:28:08.338915 24753 net.cpp:410] 1_pool3 <- 1_conv3
+I0126 21:28:08.338927 24753 net.cpp:368] 1_pool3 -> 1_pool3
+I0126 21:28:08.338945 24753 net.cpp:120] Setting up 1_pool3
+I0126 21:28:08.338959 24753 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0126 21:28:08.338971 24753 layer_factory.hpp:74] Creating layer 1_ip1
+I0126 21:28:08.338984 24753 net.cpp:90] Creating Layer 1_ip1
+I0126 21:28:08.338995 24753 net.cpp:410] 1_ip1 <- 1_pool3
+I0126 21:28:08.339010 24753 net.cpp:368] 1_ip1 -> 1_ip1
+I0126 21:28:08.339025 24753 net.cpp:120] Setting up 1_ip1
+I0126 21:28:08.341047 24753 net.cpp:127] Top shape: 100 64 (6400)
+I0126 21:28:08.341070 24753 layer_factory.hpp:74] Creating layer 1_ip2
+I0126 21:28:08.341086 24753 net.cpp:90] Creating Layer 1_ip2
+I0126 21:28:08.341099 24753 net.cpp:410] 1_ip2 <- 1_ip1
+I0126 21:28:08.341114 24753 net.cpp:368] 1_ip2 -> 1_ip2
+I0126 21:28:08.341132 24753 net.cpp:120] Setting up 1_ip2
+I0126 21:28:08.341174 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.341192 24753 layer_factory.hpp:74] Creating layer 1_prob
+I0126 21:28:08.341204 24753 net.cpp:90] Creating Layer 1_prob
+I0126 21:28:08.341215 24753 net.cpp:410] 1_prob <- 1_ip2
+I0126 21:28:08.341228 24753 net.cpp:368] 1_prob -> 1_prob
+I0126 21:28:08.341241 24753 net.cpp:120] Setting up 1_prob
+I0126 21:28:08.341256 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.341269 24753 layer_factory.hpp:74] Creating layer 1_prob_1_prob_0_split
+I0126 21:28:08.341281 24753 net.cpp:90] Creating Layer 1_prob_1_prob_0_split
+I0126 21:28:08.341294 24753 net.cpp:410] 1_prob_1_prob_0_split <- 1_prob
+I0126 21:28:08.341306 24753 net.cpp:368] 1_prob_1_prob_0_split -> 1_prob_1_prob_0_split_0
+I0126 21:28:08.341320 24753 net.cpp:368] 1_prob_1_prob_0_split -> 1_prob_1_prob_0_split_1
+I0126 21:28:08.341336 24753 net.cpp:120] Setting up 1_prob_1_prob_0_split
+I0126 21:28:08.341348 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.341361 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.341372 24753 layer_factory.hpp:74] Creating layer 2_conv1
+I0126 21:28:08.341387 24753 net.cpp:90] Creating Layer 2_conv1
+I0126 21:28:08.341398 24753 net.cpp:410] 2_conv1 <- data_cifar_0_split_1
+I0126 21:28:08.341418 24753 net.cpp:368] 2_conv1 -> 2_conv1
+I0126 21:28:08.341437 24753 net.cpp:120] Setting up 2_conv1
+I0126 21:28:08.341532 24753 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0126 21:28:08.341547 24753 layer_factory.hpp:74] Creating layer 2_pool1
+I0126 21:28:08.341562 24753 net.cpp:90] Creating Layer 2_pool1
+I0126 21:28:08.341572 24753 net.cpp:410] 2_pool1 <- 2_conv1
+I0126 21:28:08.341586 24753 net.cpp:368] 2_pool1 -> 2_pool1
+I0126 21:28:08.341600 24753 net.cpp:120] Setting up 2_pool1
+I0126 21:28:08.341614 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.341626 24753 layer_factory.hpp:74] Creating layer 2_relu1
+I0126 21:28:08.341639 24753 net.cpp:90] Creating Layer 2_relu1
+I0126 21:28:08.341650 24753 net.cpp:410] 2_relu1 <- 2_pool1
+I0126 21:28:08.341662 24753 net.cpp:357] 2_relu1 -> 2_pool1 (in-place)
+I0126 21:28:08.341675 24753 net.cpp:120] Setting up 2_relu1
+I0126 21:28:08.341688 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.341699 24753 layer_factory.hpp:74] Creating layer 2_conv2
+I0126 21:28:08.341712 24753 net.cpp:90] Creating Layer 2_conv2
+I0126 21:28:08.341724 24753 net.cpp:410] 2_conv2 <- 2_pool1
+I0126 21:28:08.341738 24753 net.cpp:368] 2_conv2 -> 2_conv2
+I0126 21:28:08.341753 24753 net.cpp:120] Setting up 2_conv2
+I0126 21:28:08.342552 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.342569 24753 layer_factory.hpp:74] Creating layer 2_relu2
+I0126 21:28:08.342582 24753 net.cpp:90] Creating Layer 2_relu2
+I0126 21:28:08.342593 24753 net.cpp:410] 2_relu2 <- 2_conv2
+I0126 21:28:08.342607 24753 net.cpp:357] 2_relu2 -> 2_conv2 (in-place)
+I0126 21:28:08.342619 24753 net.cpp:120] Setting up 2_relu2
+I0126 21:28:08.342633 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.342643 24753 layer_factory.hpp:74] Creating layer 2_pool2
+I0126 21:28:08.342658 24753 net.cpp:90] Creating Layer 2_pool2
+I0126 21:28:08.342669 24753 net.cpp:410] 2_pool2 <- 2_conv2
+I0126 21:28:08.342681 24753 net.cpp:368] 2_pool2 -> 2_pool2
+I0126 21:28:08.342694 24753 net.cpp:120] Setting up 2_pool2
+I0126 21:28:08.342708 24753 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0126 21:28:08.342720 24753 layer_factory.hpp:74] Creating layer 2_conv3
+I0126 21:28:08.342734 24753 net.cpp:90] Creating Layer 2_conv3
+I0126 21:28:08.342746 24753 net.cpp:410] 2_conv3 <- 2_pool2
+I0126 21:28:08.342759 24753 net.cpp:368] 2_conv3 -> 2_conv3
+I0126 21:28:08.342772 24753 net.cpp:120] Setting up 2_conv3
+I0126 21:28:08.344369 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.344395 24753 layer_factory.hpp:74] Creating layer 2_relu3
+I0126 21:28:08.344410 24753 net.cpp:90] Creating Layer 2_relu3
+I0126 21:28:08.344422 24753 net.cpp:410] 2_relu3 <- 2_conv3
+I0126 21:28:08.344436 24753 net.cpp:357] 2_relu3 -> 2_conv3 (in-place)
+I0126 21:28:08.344450 24753 net.cpp:120] Setting up 2_relu3
+I0126 21:28:08.344463 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.344475 24753 layer_factory.hpp:74] Creating layer 2_pool3
+I0126 21:28:08.344487 24753 net.cpp:90] Creating Layer 2_pool3
+I0126 21:28:08.344499 24753 net.cpp:410] 2_pool3 <- 2_conv3
+I0126 21:28:08.344512 24753 net.cpp:368] 2_pool3 -> 2_pool3
+I0126 21:28:08.344525 24753 net.cpp:120] Setting up 2_pool3
+I0126 21:28:08.344539 24753 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0126 21:28:08.344552 24753 layer_factory.hpp:74] Creating layer 2_ip1
+I0126 21:28:08.344565 24753 net.cpp:90] Creating Layer 2_ip1
+I0126 21:28:08.344578 24753 net.cpp:410] 2_ip1 <- 2_pool3
+I0126 21:28:08.344590 24753 net.cpp:368] 2_ip1 -> 2_ip1
+I0126 21:28:08.344604 24753 net.cpp:120] Setting up 2_ip1
+I0126 21:28:08.346627 24753 net.cpp:127] Top shape: 100 64 (6400)
+I0126 21:28:08.346650 24753 layer_factory.hpp:74] Creating layer 2_ip2
+I0126 21:28:08.346665 24753 net.cpp:90] Creating Layer 2_ip2
+I0126 21:28:08.346678 24753 net.cpp:410] 2_ip2 <- 2_ip1
+I0126 21:28:08.346690 24753 net.cpp:368] 2_ip2 -> 2_ip2
+I0126 21:28:08.346706 24753 net.cpp:120] Setting up 2_ip2
+I0126 21:28:08.346745 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.346762 24753 layer_factory.hpp:74] Creating layer 2_prob
+I0126 21:28:08.346783 24753 net.cpp:90] Creating Layer 2_prob
+I0126 21:28:08.346796 24753 net.cpp:410] 2_prob <- 2_ip2
+I0126 21:28:08.346808 24753 net.cpp:368] 2_prob -> 2_prob
+I0126 21:28:08.346822 24753 net.cpp:120] Setting up 2_prob
+I0126 21:28:08.346837 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.346848 24753 layer_factory.hpp:74] Creating layer 2_prob_2_prob_0_split
+I0126 21:28:08.346860 24753 net.cpp:90] Creating Layer 2_prob_2_prob_0_split
+I0126 21:28:08.346873 24753 net.cpp:410] 2_prob_2_prob_0_split <- 2_prob
+I0126 21:28:08.346886 24753 net.cpp:368] 2_prob_2_prob_0_split -> 2_prob_2_prob_0_split_0
+I0126 21:28:08.346900 24753 net.cpp:368] 2_prob_2_prob_0_split -> 2_prob_2_prob_0_split_1
+I0126 21:28:08.346917 24753 net.cpp:120] Setting up 2_prob_2_prob_0_split
+I0126 21:28:08.346931 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.346943 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.346956 24753 layer_factory.hpp:74] Creating layer 3_conv1
+I0126 21:28:08.346969 24753 net.cpp:90] Creating Layer 3_conv1
+I0126 21:28:08.346982 24753 net.cpp:410] 3_conv1 <- data_cifar_0_split_2
+I0126 21:28:08.346995 24753 net.cpp:368] 3_conv1 -> 3_conv1
+I0126 21:28:08.347009 24753 net.cpp:120] Setting up 3_conv1
+I0126 21:28:08.347110 24753 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0126 21:28:08.347129 24753 layer_factory.hpp:74] Creating layer 3_pool1
+I0126 21:28:08.347146 24753 net.cpp:90] Creating Layer 3_pool1
+I0126 21:28:08.347159 24753 net.cpp:410] 3_pool1 <- 3_conv1
+I0126 21:28:08.347177 24753 net.cpp:368] 3_pool1 -> 3_pool1
+I0126 21:28:08.347193 24753 net.cpp:120] Setting up 3_pool1
+I0126 21:28:08.347211 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.347223 24753 layer_factory.hpp:74] Creating layer 3_relu1
+I0126 21:28:08.347235 24753 net.cpp:90] Creating Layer 3_relu1
+I0126 21:28:08.347246 24753 net.cpp:410] 3_relu1 <- 3_pool1
+I0126 21:28:08.347259 24753 net.cpp:357] 3_relu1 -> 3_pool1 (in-place)
+I0126 21:28:08.347272 24753 net.cpp:120] Setting up 3_relu1
+I0126 21:28:08.347285 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.347296 24753 layer_factory.hpp:74] Creating layer 3_conv2
+I0126 21:28:08.347311 24753 net.cpp:90] Creating Layer 3_conv2
+I0126 21:28:08.347322 24753 net.cpp:410] 3_conv2 <- 3_pool1
+I0126 21:28:08.347337 24753 net.cpp:368] 3_conv2 -> 3_conv2
+I0126 21:28:08.347352 24753 net.cpp:120] Setting up 3_conv2
+I0126 21:28:08.348151 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.348170 24753 layer_factory.hpp:74] Creating layer 3_relu2
+I0126 21:28:08.348182 24753 net.cpp:90] Creating Layer 3_relu2
+I0126 21:28:08.348193 24753 net.cpp:410] 3_relu2 <- 3_conv2
+I0126 21:28:08.348206 24753 net.cpp:357] 3_relu2 -> 3_conv2 (in-place)
+I0126 21:28:08.348218 24753 net.cpp:120] Setting up 3_relu2
+I0126 21:28:08.348232 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.348242 24753 layer_factory.hpp:74] Creating layer 3_pool2
+I0126 21:28:08.348256 24753 net.cpp:90] Creating Layer 3_pool2
+I0126 21:28:08.348268 24753 net.cpp:410] 3_pool2 <- 3_conv2
+I0126 21:28:08.348280 24753 net.cpp:368] 3_pool2 -> 3_pool2
+I0126 21:28:08.348294 24753 net.cpp:120] Setting up 3_pool2
+I0126 21:28:08.348309 24753 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0126 21:28:08.348320 24753 layer_factory.hpp:74] Creating layer 3_conv3
+I0126 21:28:08.348332 24753 net.cpp:90] Creating Layer 3_conv3
+I0126 21:28:08.348343 24753 net.cpp:410] 3_conv3 <- 3_pool2
+I0126 21:28:08.348356 24753 net.cpp:368] 3_conv3 -> 3_conv3
+I0126 21:28:08.348371 24753 net.cpp:120] Setting up 3_conv3
+I0126 21:28:08.349979 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.350002 24753 layer_factory.hpp:74] Creating layer 3_relu3
+I0126 21:28:08.350015 24753 net.cpp:90] Creating Layer 3_relu3
+I0126 21:28:08.350026 24753 net.cpp:410] 3_relu3 <- 3_conv3
+I0126 21:28:08.350040 24753 net.cpp:357] 3_relu3 -> 3_conv3 (in-place)
+I0126 21:28:08.350054 24753 net.cpp:120] Setting up 3_relu3
+I0126 21:28:08.350070 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.350087 24753 layer_factory.hpp:74] Creating layer 3_pool3
+I0126 21:28:08.350100 24753 net.cpp:90] Creating Layer 3_pool3
+I0126 21:28:08.350111 24753 net.cpp:410] 3_pool3 <- 3_conv3
+I0126 21:28:08.350123 24753 net.cpp:368] 3_pool3 -> 3_pool3
+I0126 21:28:08.350137 24753 net.cpp:120] Setting up 3_pool3
+I0126 21:28:08.350152 24753 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0126 21:28:08.350162 24753 layer_factory.hpp:74] Creating layer 3_ip1
+I0126 21:28:08.350177 24753 net.cpp:90] Creating Layer 3_ip1
+I0126 21:28:08.350188 24753 net.cpp:410] 3_ip1 <- 3_pool3
+I0126 21:28:08.350203 24753 net.cpp:368] 3_ip1 -> 3_ip1
+I0126 21:28:08.350217 24753 net.cpp:120] Setting up 3_ip1
+I0126 21:28:08.352241 24753 net.cpp:127] Top shape: 100 64 (6400)
+I0126 21:28:08.352264 24753 layer_factory.hpp:74] Creating layer 3_ip2
+I0126 21:28:08.352282 24753 net.cpp:90] Creating Layer 3_ip2
+I0126 21:28:08.352293 24753 net.cpp:410] 3_ip2 <- 3_ip1
+I0126 21:28:08.352308 24753 net.cpp:368] 3_ip2 -> 3_ip2
+I0126 21:28:08.352322 24753 net.cpp:120] Setting up 3_ip2
+I0126 21:28:08.352362 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.352376 24753 layer_factory.hpp:74] Creating layer 3_prob
+I0126 21:28:08.352391 24753 net.cpp:90] Creating Layer 3_prob
+I0126 21:28:08.352402 24753 net.cpp:410] 3_prob <- 3_ip2
+I0126 21:28:08.352416 24753 net.cpp:368] 3_prob -> 3_prob
+I0126 21:28:08.352428 24753 net.cpp:120] Setting up 3_prob
+I0126 21:28:08.352443 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.352454 24753 layer_factory.hpp:74] Creating layer 3_prob_3_prob_0_split
+I0126 21:28:08.352468 24753 net.cpp:90] Creating Layer 3_prob_3_prob_0_split
+I0126 21:28:08.352478 24753 net.cpp:410] 3_prob_3_prob_0_split <- 3_prob
+I0126 21:28:08.352493 24753 net.cpp:368] 3_prob_3_prob_0_split -> 3_prob_3_prob_0_split_0
+I0126 21:28:08.352506 24753 net.cpp:368] 3_prob_3_prob_0_split -> 3_prob_3_prob_0_split_1
+I0126 21:28:08.352520 24753 net.cpp:120] Setting up 3_prob_3_prob_0_split
+I0126 21:28:08.352535 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.352546 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.352557 24753 layer_factory.hpp:74] Creating layer 4_conv1
+I0126 21:28:08.352572 24753 net.cpp:90] Creating Layer 4_conv1
+I0126 21:28:08.352584 24753 net.cpp:410] 4_conv1 <- data_cifar_0_split_3
+I0126 21:28:08.352597 24753 net.cpp:368] 4_conv1 -> 4_conv1
+I0126 21:28:08.352612 24753 net.cpp:120] Setting up 4_conv1
+I0126 21:28:08.352707 24753 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0126 21:28:08.352722 24753 layer_factory.hpp:74] Creating layer 4_pool1
+I0126 21:28:08.352735 24753 net.cpp:90] Creating Layer 4_pool1
+I0126 21:28:08.352746 24753 net.cpp:410] 4_pool1 <- 4_conv1
+I0126 21:28:08.352759 24753 net.cpp:368] 4_pool1 -> 4_pool1
+I0126 21:28:08.352772 24753 net.cpp:120] Setting up 4_pool1
+I0126 21:28:08.352787 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.352799 24753 layer_factory.hpp:74] Creating layer 4_relu1
+I0126 21:28:08.352812 24753 net.cpp:90] Creating Layer 4_relu1
+I0126 21:28:08.352823 24753 net.cpp:410] 4_relu1 <- 4_pool1
+I0126 21:28:08.352836 24753 net.cpp:357] 4_relu1 -> 4_pool1 (in-place)
+I0126 21:28:08.352849 24753 net.cpp:120] Setting up 4_relu1
+I0126 21:28:08.352862 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.352874 24753 layer_factory.hpp:74] Creating layer 4_conv2
+I0126 21:28:08.352886 24753 net.cpp:90] Creating Layer 4_conv2
+I0126 21:28:08.352898 24753 net.cpp:410] 4_conv2 <- 4_pool1
+I0126 21:28:08.352911 24753 net.cpp:368] 4_conv2 -> 4_conv2
+I0126 21:28:08.352926 24753 net.cpp:120] Setting up 4_conv2
+I0126 21:28:08.353730 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.353760 24753 layer_factory.hpp:74] Creating layer 4_relu2
+I0126 21:28:08.353777 24753 net.cpp:90] Creating Layer 4_relu2
+I0126 21:28:08.353791 24753 net.cpp:410] 4_relu2 <- 4_conv2
+I0126 21:28:08.353807 24753 net.cpp:357] 4_relu2 -> 4_conv2 (in-place)
+I0126 21:28:08.353822 24753 net.cpp:120] Setting up 4_relu2
+I0126 21:28:08.353842 24753 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0126 21:28:08.353863 24753 layer_factory.hpp:74] Creating layer 4_pool2
+I0126 21:28:08.353876 24753 net.cpp:90] Creating Layer 4_pool2
+I0126 21:28:08.353888 24753 net.cpp:410] 4_pool2 <- 4_conv2
+I0126 21:28:08.353904 24753 net.cpp:368] 4_pool2 -> 4_pool2
+I0126 21:28:08.353917 24753 net.cpp:120] Setting up 4_pool2
+I0126 21:28:08.353932 24753 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0126 21:28:08.353943 24753 layer_factory.hpp:74] Creating layer 4_conv3
+I0126 21:28:08.353958 24753 net.cpp:90] Creating Layer 4_conv3
+I0126 21:28:08.353971 24753 net.cpp:410] 4_conv3 <- 4_pool2
+I0126 21:28:08.353983 24753 net.cpp:368] 4_conv3 -> 4_conv3
+I0126 21:28:08.353997 24753 net.cpp:120] Setting up 4_conv3
+I0126 21:28:08.355579 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.355599 24753 layer_factory.hpp:74] Creating layer 4_relu3
+I0126 21:28:08.355612 24753 net.cpp:90] Creating Layer 4_relu3
+I0126 21:28:08.355624 24753 net.cpp:410] 4_relu3 <- 4_conv3
+I0126 21:28:08.355636 24753 net.cpp:357] 4_relu3 -> 4_conv3 (in-place)
+I0126 21:28:08.355649 24753 net.cpp:120] Setting up 4_relu3
+I0126 21:28:08.355662 24753 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0126 21:28:08.355674 24753 layer_factory.hpp:74] Creating layer 4_pool3
+I0126 21:28:08.355687 24753 net.cpp:90] Creating Layer 4_pool3
+I0126 21:28:08.355698 24753 net.cpp:410] 4_pool3 <- 4_conv3
+I0126 21:28:08.355711 24753 net.cpp:368] 4_pool3 -> 4_pool3
+I0126 21:28:08.355725 24753 net.cpp:120] Setting up 4_pool3
+I0126 21:28:08.355738 24753 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0126 21:28:08.355749 24753 layer_factory.hpp:74] Creating layer 4_ip1
+I0126 21:28:08.355762 24753 net.cpp:90] Creating Layer 4_ip1
+I0126 21:28:08.355773 24753 net.cpp:410] 4_ip1 <- 4_pool3
+I0126 21:28:08.355787 24753 net.cpp:368] 4_ip1 -> 4_ip1
+I0126 21:28:08.355801 24753 net.cpp:120] Setting up 4_ip1
+I0126 21:28:08.357830 24753 net.cpp:127] Top shape: 100 64 (6400)
+I0126 21:28:08.357853 24753 layer_factory.hpp:74] Creating layer 4_ip2
+I0126 21:28:08.357868 24753 net.cpp:90] Creating Layer 4_ip2
+I0126 21:28:08.357880 24753 net.cpp:410] 4_ip2 <- 4_ip1
+I0126 21:28:08.357897 24753 net.cpp:368] 4_ip2 -> 4_ip2
+I0126 21:28:08.357913 24753 net.cpp:120] Setting up 4_ip2
+I0126 21:28:08.357952 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.357967 24753 layer_factory.hpp:74] Creating layer 4_prob
+I0126 21:28:08.357980 24753 net.cpp:90] Creating Layer 4_prob
+I0126 21:28:08.357991 24753 net.cpp:410] 4_prob <- 4_ip2
+I0126 21:28:08.358006 24753 net.cpp:368] 4_prob -> 4_prob
+I0126 21:28:08.358019 24753 net.cpp:120] Setting up 4_prob
+I0126 21:28:08.358034 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.358045 24753 layer_factory.hpp:74] Creating layer 4_prob_4_prob_0_split
+I0126 21:28:08.358057 24753 net.cpp:90] Creating Layer 4_prob_4_prob_0_split
+I0126 21:28:08.358068 24753 net.cpp:410] 4_prob_4_prob_0_split <- 4_prob
+I0126 21:28:08.358081 24753 net.cpp:368] 4_prob_4_prob_0_split -> 4_prob_4_prob_0_split_0
+I0126 21:28:08.358095 24753 net.cpp:368] 4_prob_4_prob_0_split -> 4_prob_4_prob_0_split_1
+I0126 21:28:08.358109 24753 net.cpp:120] Setting up 4_prob_4_prob_0_split
+I0126 21:28:08.358124 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.358135 24753 net.cpp:127] Top shape: 100 10 (1000)
+I0126 21:28:08.358146 24753 layer_factory.hpp:74] Creating layer 1_accuracy
+I0126 21:28:08.358160 24753 net.cpp:90] Creating Layer 1_accuracy
+I0126 21:28:08.358172 24753 net.cpp:410] 1_accuracy <- 1_prob_1_prob_0_split_0
+I0126 21:28:08.358184 24753 net.cpp:410] 1_accuracy <- label_cifar_1_split_0
+I0126 21:28:08.358199 24753 net.cpp:368] 1_accuracy -> 1_accuracy
+I0126 21:28:08.358212 24753 net.cpp:120] Setting up 1_accuracy
+I0126 21:28:08.358228 24753 net.cpp:127] Top shape: (1)
+I0126 21:28:08.358239 24753 layer_factory.hpp:74] Creating layer 2_accuracy
+I0126 21:28:08.358253 24753 net.cpp:90] Creating Layer 2_accuracy
+I0126 21:28:08.358263 24753 net.cpp:410] 2_accuracy <- 2_prob_2_prob_0_split_0
+I0126 21:28:08.358279 24753 net.cpp:410] 2_accuracy <- label_cifar_1_split_1
+I0126 21:28:08.358299 24753 net.cpp:368] 2_accuracy -> 2_accuracy
+I0126 21:28:08.358312 24753 net.cpp:120] Setting up 2_accuracy
+I0126 21:28:08.358325 24753 net.cpp:127] Top shape: (1)
+I0126 21:28:08.358336 24753 layer_factory.hpp:74] Creating layer 3_accuracy
+I0126 21:28:08.358348 24753 net.cpp:90] Creating Layer 3_accuracy
+I0126 21:28:08.358359 24753 net.cpp:410] 3_accuracy <- 3_prob_3_prob_0_split_0
+I0126 21:28:08.358372 24753 net.cpp:410] 3_accuracy <- label_cifar_1_split_2
+I0126 21:28:08.358386 24753 net.cpp:368] 3_accuracy -> 3_accuracy
+I0126 21:28:08.358399 24753 net.cpp:120] Setting up 3_accuracy
+I0126 21:28:08.358412 24753 net.cpp:127] Top shape: (1)
+I0126 21:28:08.358422 24753 layer_factory.hpp:74] Creating layer 4_accuracy
+I0126 21:28:08.358435 24753 net.cpp:90] Creating Layer 4_accuracy
+I0126 21:28:08.358446 24753 net.cpp:410] 4_accuracy <- 4_prob_4_prob_0_split_0
+I0126 21:28:08.358458 24753 net.cpp:410] 4_accuracy <- label_cifar_1_split_3
+I0126 21:28:08.358472 24753 net.cpp:368] 4_accuracy -> 4_accuracy
+I0126 21:28:08.358485 24753 net.cpp:120] Setting up 4_accuracy
+I0126 21:28:08.358499 24753 net.cpp:127] Top shape: (1)
+I0126 21:28:08.358510 24753 layer_factory.hpp:74] Creating layer accuracy
+I0126 21:28:08.358523 24753 net.cpp:90] Creating Layer accuracy
+I0126 21:28:08.358536 24753 net.cpp:410] accuracy <- 1_prob_1_prob_0_split_1
+I0126 21:28:08.358547 24753 net.cpp:410] accuracy <- 2_prob_2_prob_0_split_1
+I0126 21:28:08.358558 24753 net.cpp:410] accuracy <- 3_prob_3_prob_0_split_1
+I0126 21:28:08.358570 24753 net.cpp:410] accuracy <- 4_prob_4_prob_0_split_1
+I0126 21:28:08.358582 24753 net.cpp:410] accuracy <- label_cifar_1_split_4
+I0126 21:28:08.358595 24753 net.cpp:368] accuracy -> oracle accuracy
+I0126 21:28:08.358609 24753 net.cpp:120] Setting up accuracy
+I0126 21:28:08.358623 24753 net.cpp:127] Top shape: (1)
+I0126 21:28:08.358634 24753 net.cpp:194] accuracy does not need backward computation.
+I0126 21:28:08.358646 24753 net.cpp:194] 4_accuracy does not need backward computation.
+I0126 21:28:08.358659 24753 net.cpp:194] 3_accuracy does not need backward computation.
+I0126 21:28:08.358670 24753 net.cpp:194] 2_accuracy does not need backward computation.
+I0126 21:28:08.358681 24753 net.cpp:194] 1_accuracy does not need backward computation.
+I0126 21:28:08.358693 24753 net.cpp:194] 4_prob_4_prob_0_split does not need backward computation.
+I0126 21:28:08.358705 24753 net.cpp:194] 4_prob does not need backward computation.
+I0126 21:28:08.358716 24753 net.cpp:194] 4_ip2 does not need backward computation.
+I0126 21:28:08.358727 24753 net.cpp:194] 4_ip1 does not need backward computation.
+I0126 21:28:08.358738 24753 net.cpp:194] 4_pool3 does not need backward computation.
+I0126 21:28:08.358750 24753 net.cpp:194] 4_relu3 does not need backward computation.
+I0126 21:28:08.358762 24753 net.cpp:194] 4_conv3 does not need backward computation.
+I0126 21:28:08.358772 24753 net.cpp:194] 4_pool2 does not need backward computation.
+I0126 21:28:08.358784 24753 net.cpp:194] 4_relu2 does not need backward computation.
+I0126 21:28:08.358796 24753 net.cpp:194] 4_conv2 does not need backward computation.
+I0126 21:28:08.358808 24753 net.cpp:194] 4_relu1 does not need backward computation.
+I0126 21:28:08.358819 24753 net.cpp:194] 4_pool1 does not need backward computation.
+I0126 21:28:08.358829 24753 net.cpp:194] 4_conv1 does not need backward computation.
+I0126 21:28:08.358840 24753 net.cpp:194] 3_prob_3_prob_0_split does not need backward computation.
+I0126 21:28:08.358852 24753 net.cpp:194] 3_prob does not need backward computation.
+I0126 21:28:08.358863 24753 net.cpp:194] 3_ip2 does not need backward computation.
+I0126 21:28:08.358875 24753 net.cpp:194] 3_ip1 does not need backward computation.
+I0126 21:28:08.358886 24753 net.cpp:194] 3_pool3 does not need backward computation.
+I0126 21:28:08.358896 24753 net.cpp:194] 3_relu3 does not need backward computation.
+I0126 21:28:08.358907 24753 net.cpp:194] 3_conv3 does not need backward computation.
+I0126 21:28:08.358922 24753 net.cpp:194] 3_pool2 does not need backward computation.
+I0126 21:28:08.358937 24753 net.cpp:194] 3_relu2 does not need backward computation.
+I0126 21:28:08.358948 24753 net.cpp:194] 3_conv2 does not need backward computation.
+I0126 21:28:08.358959 24753 net.cpp:194] 3_relu1 does not need backward computation.
+I0126 21:28:08.358970 24753 net.cpp:194] 3_pool1 does not need backward computation.
+I0126 21:28:08.358983 24753 net.cpp:194] 3_conv1 does not need backward computation.
+I0126 21:28:08.358994 24753 net.cpp:194] 2_prob_2_prob_0_split does not need backward computation.
+I0126 21:28:08.359004 24753 net.cpp:194] 2_prob does not need backward computation.
+I0126 21:28:08.359015 24753 net.cpp:194] 2_ip2 does not need backward computation.
+I0126 21:28:08.359026 24753 net.cpp:194] 2_ip1 does not need backward computation.
+I0126 21:28:08.359037 24753 net.cpp:194] 2_pool3 does not need backward computation.
+I0126 21:28:08.359050 24753 net.cpp:194] 2_relu3 does not need backward computation.
+I0126 21:28:08.359061 24753 net.cpp:194] 2_conv3 does not need backward computation.
+I0126 21:28:08.359071 24753 net.cpp:194] 2_pool2 does not need backward computation.
+I0126 21:28:08.359082 24753 net.cpp:194] 2_relu2 does not need backward computation.
+I0126 21:28:08.359093 24753 net.cpp:194] 2_conv2 does not need backward computation.
+I0126 21:28:08.359104 24753 net.cpp:194] 2_relu1 does not need backward computation.
+I0126 21:28:08.359115 24753 net.cpp:194] 2_pool1 does not need backward computation.
+I0126 21:28:08.359127 24753 net.cpp:194] 2_conv1 does not need backward computation.
+I0126 21:28:08.359138 24753 net.cpp:194] 1_prob_1_prob_0_split does not need backward computation.
+I0126 21:28:08.359148 24753 net.cpp:194] 1_prob does not need backward computation.
+I0126 21:28:08.359160 24753 net.cpp:194] 1_ip2 does not need backward computation.
+I0126 21:28:08.359170 24753 net.cpp:194] 1_ip1 does not need backward computation.
+I0126 21:28:08.359181 24753 net.cpp:194] 1_pool3 does not need backward computation.
+I0126 21:28:08.359194 24753 net.cpp:194] 1_relu3 does not need backward computation.
+I0126 21:28:08.359203 24753 net.cpp:194] 1_conv3 does not need backward computation.
+I0126 21:28:08.359215 24753 net.cpp:194] 1_pool2 does not need backward computation.
+I0126 21:28:08.359226 24753 net.cpp:194] 1_relu2 does not need backward computation.
+I0126 21:28:08.359236 24753 net.cpp:194] 1_conv2 does not need backward computation.
+I0126 21:28:08.359248 24753 net.cpp:194] 1_relu1 does not need backward computation.
+I0126 21:28:08.359258 24753 net.cpp:194] 1_pool1 does not need backward computation.
+I0126 21:28:08.359269 24753 net.cpp:194] 1_conv1 does not need backward computation.
+I0126 21:28:08.359282 24753 net.cpp:194] label_cifar_1_split does not need backward computation.
+I0126 21:28:08.359293 24753 net.cpp:194] data_cifar_0_split does not need backward computation.
+I0126 21:28:08.359307 24753 net.cpp:194] cifar does not need backward computation.
+I0126 21:28:08.359316 24753 net.cpp:235] This network produces output 1_accuracy
+I0126 21:28:08.359328 24753 net.cpp:235] This network produces output 2_accuracy
+I0126 21:28:08.359339 24753 net.cpp:235] This network produces output 3_accuracy
+I0126 21:28:08.359350 24753 net.cpp:235] This network produces output 4_accuracy
+I0126 21:28:08.359359 24753 net.cpp:235] This network produces output oracle accuracy
+I0126 21:28:08.359401 24753 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0126 21:28:08.359417 24753 net.cpp:247] Network initialization done.
+I0126 21:28:08.359428 24753 net.cpp:248] Memory required for data: 129192820
+I0126 21:28:08.359565 24753 solver.cpp:42] Solver scaffolding done.
+I0126 21:28:08.359638 24753 solver.cpp:225] Solving CIFAR10_quick
+I0126 21:28:08.359650 24753 solver.cpp:226] Learning Rate Policy: fixed
+I0126 21:28:08.359664 24753 solver.cpp:269] Iteration 0, Testing net (#0)
+I0126 21:28:53.287214 24753 solver.cpp:318]     Test net output #0: 1_accuracy = 0.0996
+I0126 21:28:53.287307 24753 solver.cpp:318]     Test net output #1: 2_accuracy = 0.1045
+I0126 21:28:53.287314 24753 solver.cpp:318]     Test net output #2: 3_accuracy = 0.1238
+I0126 21:28:53.287319 24753 solver.cpp:318]     Test net output #3: 4_accuracy = 0.1103
+I0126 21:28:53.287323 24753 solver.cpp:318]     Test net output #4: oracle accuracy = 0.3883
+I0126 21:28:56.858711 24753 solver.cpp:189] Iteration 0, loss = 9.2002
+I0126 21:28:56.858741 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 75
+I0126 21:28:56.858748 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 101
+I0126 21:28:56.858753 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 71
+I0126 21:28:56.858758 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 103
+I0126 21:28:56.858767 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 2.30011 (* 1 = 2.30011 loss)
+I0126 21:28:56.858774 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 2.29943 (* 1 = 2.29943 loss)
+I0126 21:28:56.858780 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 2.30121 (* 1 = 2.30121 loss)
+I0126 21:28:56.858786 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 2.29945 (* 1 = 2.29945 loss)
+I0126 21:28:56.858791 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 75
+I0126 21:28:56.858796 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 101
+I0126 21:28:56.858817 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 71
+I0126 21:28:56.858824 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 103
+I0126 21:28:56.858831 24753 solver.cpp:461] Iteration 0, lr = 0.001
+I0126 21:35:04.119097 24753 solver.cpp:189] Iteration 100, loss = 1.80867
+I0126 21:35:04.119143 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 67
+I0126 21:35:04.119149 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 39
+I0126 21:35:04.119151 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 178
+I0126 21:35:04.119154 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 66
+I0126 21:35:04.119160 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0.000213333 (* 1 = 0.000213333 loss)
+I0126 21:35:04.119164 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 21:35:04.119168 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 1.08813 (* 1 = 1.08813 loss)
+I0126 21:35:04.119170 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.720322 (* 1 = 0.720322 loss)
+I0126 21:35:04.119174 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 5717
+I0126 21:35:04.119176 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 4437
+I0126 21:35:04.119179 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 18974
+I0126 21:35:04.119181 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 6222
+I0126 21:35:04.119184 24753 solver.cpp:461] Iteration 100, lr = 0.001
+I0126 21:41:13.508852 24753 solver.cpp:189] Iteration 200, loss = 1.77079
+I0126 21:41:13.508893 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 46
+I0126 21:41:13.508898 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 50
+I0126 21:41:13.508900 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 162
+I0126 21:41:13.508903 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 92
+I0126 21:41:13.508908 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 6.27098e-06 (* 1 = 6.27098e-06 loss)
+I0126 21:41:13.508913 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 21:41:13.508916 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.954621 (* 1 = 0.954621 loss)
+I0126 21:41:13.508920 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.816166 (* 1 = 0.816166 loss)
+I0126 21:41:13.508924 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 11773
+I0126 21:41:13.508925 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 7980
+I0126 21:41:13.508929 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 36843
+I0126 21:41:13.508931 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 13754
+I0126 21:41:13.508934 24753 solver.cpp:461] Iteration 200, lr = 0.001
+I0126 21:47:30.229846 24753 solver.cpp:189] Iteration 300, loss = 1.4445
+I0126 21:47:30.229908 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 56
+I0126 21:47:30.229918 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 34
+I0126 21:47:30.229923 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 181
+I0126 21:47:30.229930 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 79
+I0126 21:47:30.229939 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 6.50362e-05 (* 1 = 6.50362e-05 loss)
+I0126 21:47:30.229943 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 21:47:30.229946 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.890938 (* 1 = 0.890938 loss)
+I0126 21:47:30.229950 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.553496 (* 1 = 0.553496 loss)
+I0126 21:47:30.229953 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 17717
+I0126 21:47:30.229955 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 11439
+I0126 21:47:30.229959 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 54678
+I0126 21:47:30.229960 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 21516
+I0126 21:47:30.229964 24753 solver.cpp:461] Iteration 300, lr = 0.001
+I0126 21:53:39.604413 24753 solver.cpp:189] Iteration 400, loss = 1.27148
+I0126 21:53:39.604460 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 56
+I0126 21:53:39.604465 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 28
+I0126 21:53:39.604467 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 189
+I0126 21:53:39.604470 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 77
+I0126 21:53:39.604476 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 6.38621e-09 (* 1 = 6.38621e-09 loss)
+I0126 21:53:39.604481 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 21:53:39.604485 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.710301 (* 1 = 0.710301 loss)
+I0126 21:53:39.604487 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.561174 (* 1 = 0.561174 loss)
+I0126 21:53:39.604490 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 23667
+I0126 21:53:39.604493 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 14931
+I0126 21:53:39.604499 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 72448
+I0126 21:53:39.604503 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 29304
+I0126 21:53:39.604508 24753 solver.cpp:461] Iteration 400, lr = 0.001
+I0126 21:59:38.394841 24753 solver.cpp:189] Iteration 500, loss = 1.13783
+I0126 21:59:38.394882 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 54
+I0126 21:59:38.394889 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 41
+I0126 21:59:38.394894 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 159
+I0126 21:59:38.394898 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 96
+I0126 21:59:38.394908 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 9.0511e-08 (* 1 = 9.0511e-08 loss)
+I0126 21:59:38.394928 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 21:59:38.394935 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.636331 (* 1 = 0.636331 loss)
+I0126 21:59:38.394942 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.501495 (* 1 = 0.501495 loss)
+I0126 21:59:38.394963 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 29476
+I0126 21:59:38.394969 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 18482
+I0126 21:59:38.394973 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 90098
+I0126 21:59:38.394979 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 37294
+I0126 21:59:38.394994 24753 solver.cpp:461] Iteration 500, lr = 0.001
+I0126 22:05:37.221658 24753 solver.cpp:189] Iteration 600, loss = 1.25797
+I0126 22:05:37.221729 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 72
+I0126 22:05:37.221740 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 33
+I0126 22:05:37.221745 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 178
+I0126 22:05:37.221751 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 67
+I0126 22:05:37.221760 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0.00100904 (* 1 = 0.00100904 loss)
+I0126 22:05:37.221765 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:05:37.221768 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.813748 (* 1 = 0.813748 loss)
+I0126 22:05:37.221771 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.443212 (* 1 = 0.443212 loss)
+I0126 22:05:37.221774 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 35455
+I0126 22:05:37.221777 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 21968
+I0126 22:05:37.221779 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 107830
+I0126 22:05:37.221782 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 45097
+I0126 22:05:37.221786 24753 solver.cpp:461] Iteration 600, lr = 0.001
+I0126 22:11:36.018767 24753 solver.cpp:189] Iteration 700, loss = 0.817308
+I0126 22:11:36.018810 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 51
+I0126 22:11:36.018815 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 31
+I0126 22:11:36.018820 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 185
+I0126 22:11:36.018821 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 83
+I0126 22:11:36.018827 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:11:36.018831 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:11:36.018834 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.544059 (* 1 = 0.544059 loss)
+I0126 22:11:36.018837 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.273248 (* 1 = 0.273248 loss)
+I0126 22:11:36.018841 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 41446
+I0126 22:11:36.018843 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 25431
+I0126 22:11:36.018846 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 125706
+I0126 22:11:36.018849 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 52767
+I0126 22:11:36.018852 24753 solver.cpp:461] Iteration 700, lr = 0.001
+I0126 22:17:34.819798 24753 solver.cpp:189] Iteration 800, loss = 1.02553
+I0126 22:17:34.819846 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 50
+I0126 22:17:34.819851 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 29
+I0126 22:17:34.819854 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 188
+I0126 22:17:34.819857 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 83
+I0126 22:17:34.819862 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:17:34.819869 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:17:34.819876 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.583038 (* 1 = 0.583038 loss)
+I0126 22:17:34.819882 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.442488 (* 1 = 0.442488 loss)
+I0126 22:17:34.819887 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 47142
+I0126 22:17:34.819891 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 28956
+I0126 22:17:34.819895 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 143477
+I0126 22:17:34.819900 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 60775
+I0126 22:17:34.819919 24753 solver.cpp:461] Iteration 800, lr = 0.001
+I0126 22:23:33.629623 24753 solver.cpp:189] Iteration 900, loss = 0.855006
+I0126 22:23:33.629694 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 67
+I0126 22:23:33.629704 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 43
+I0126 22:23:33.629709 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 173
+I0126 22:23:33.629716 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 67
+I0126 22:23:33.629724 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0.00102204 (* 1 = 0.00102204 loss)
+I0126 22:23:33.629730 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:23:33.629736 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.612348 (* 1 = 0.612348 loss)
+I0126 22:23:33.629742 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.241635 (* 1 = 0.241635 loss)
+I0126 22:23:33.629750 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 53122
+I0126 22:23:33.629755 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 32472
+I0126 22:23:33.629760 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 161096
+I0126 22:23:33.629765 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 68660
+I0126 22:23:33.629771 24753 solver.cpp:461] Iteration 900, lr = 0.001
+I0126 22:29:32.430423 24753 solver.cpp:189] Iteration 1000, loss = 0.920867
+I0126 22:29:32.430464 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 59
+I0126 22:29:32.430469 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 36
+I0126 22:29:32.430471 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 189
+I0126 22:29:32.430474 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 66
+I0126 22:29:32.430480 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:29:32.430485 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:29:32.430487 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.454982 (* 1 = 0.454982 loss)
+I0126 22:29:32.430490 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.465885 (* 1 = 0.465885 loss)
+I0126 22:29:32.430493 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 58814
+I0126 22:29:32.430496 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 35955
+I0126 22:29:32.430500 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 178954
+I0126 22:29:32.430505 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 76627
+I0126 22:29:32.430510 24753 solver.cpp:461] Iteration 1000, lr = 0.001
+I0126 22:35:31.224186 24753 solver.cpp:189] Iteration 1100, loss = 0.993534
+I0126 22:35:31.224236 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 56
+I0126 22:35:31.224243 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 39
+I0126 22:35:31.224247 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 174
+I0126 22:35:31.224252 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 81
+I0126 22:35:31.224261 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:35:31.224280 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:35:31.224287 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.533979 (* 1 = 0.533979 loss)
+I0126 22:35:31.224292 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.459555 (* 1 = 0.459555 loss)
+I0126 22:35:31.224298 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 64738
+I0126 22:35:31.224301 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 39437
+I0126 22:35:31.224306 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 196745
+I0126 22:35:31.224321 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 84430
+I0126 22:35:31.224328 24753 solver.cpp:461] Iteration 1100, lr = 0.001
+I0126 22:41:30.023900 24753 solver.cpp:189] Iteration 1200, loss = 0.804191
+I0126 22:41:30.023974 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 58
+I0126 22:41:30.023983 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 50
+I0126 22:41:30.023988 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 162
+I0126 22:41:30.023995 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 80
+I0126 22:41:30.024004 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 2.05533e-09 (* 1 = 2.05533e-09 loss)
+I0126 22:41:30.024011 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:41:30.024016 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.455866 (* 1 = 0.455866 loss)
+I0126 22:41:30.024022 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.348325 (* 1 = 0.348325 loss)
+I0126 22:41:30.024029 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 70371
+I0126 22:41:30.024035 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 42980
+I0126 22:41:30.024040 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 214429
+I0126 22:41:30.024046 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 92570
+I0126 22:41:30.024051 24753 solver.cpp:461] Iteration 1200, lr = 0.001
+I0126 22:47:27.267549 24753 solver.cpp:189] Iteration 1300, loss = 0.740192
+I0126 22:47:27.267601 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 58
+I0126 22:47:27.267606 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 34
+I0126 22:47:27.267608 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 182
+I0126 22:47:27.267611 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 76
+I0126 22:47:27.267616 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:47:27.267619 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:47:27.267623 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.428461 (* 1 = 0.428461 loss)
+I0126 22:47:27.267627 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.311731 (* 1 = 0.311731 loss)
+I0126 22:47:27.267628 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 76017
+I0126 22:47:27.267632 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 46439
+I0126 22:47:27.267637 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 232277
+I0126 22:47:27.267642 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 100617
+I0126 22:47:27.267647 24753 solver.cpp:461] Iteration 1300, lr = 0.001
+I0126 22:53:26.097551 24753 solver.cpp:189] Iteration 1400, loss = 0.729851
+I0126 22:53:26.097594 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 54
+I0126 22:53:26.097602 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 28
+I0126 22:53:26.097606 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 192
+I0126 22:53:26.097611 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 76
+I0126 22:53:26.097620 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:53:26.097646 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:53:26.097653 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.358606 (* 1 = 0.358606 loss)
+I0126 22:53:26.097659 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.371245 (* 1 = 0.371245 loss)
+I0126 22:53:26.097674 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 81667
+I0126 22:53:26.097681 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 49931
+I0126 22:53:26.097685 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 250126
+I0126 22:53:26.097689 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 108626
+I0126 22:53:26.097704 24753 solver.cpp:461] Iteration 1400, lr = 0.001
+I0126 22:59:24.950268 24753 solver.cpp:189] Iteration 1500, loss = 0.793774
+I0126 22:59:24.950337 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 36
+I0126 22:59:24.950346 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 41
+I0126 22:59:24.950351 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 159
+I0126 22:59:24.950359 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 114
+I0126 22:59:24.950367 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:59:24.950371 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 22:59:24.950374 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.379047 (* 1 = 0.379047 loss)
+I0126 22:59:24.950378 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.414727 (* 1 = 0.414727 loss)
+I0126 22:59:24.950381 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 85664
+I0126 22:59:24.950383 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 53482
+I0126 22:59:24.950387 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 267820
+I0126 22:59:24.950388 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 118384
+I0126 22:59:24.950392 24753 solver.cpp:461] Iteration 1500, lr = 0.001
+I0126 23:05:23.786773 24753 solver.cpp:189] Iteration 1600, loss = 0.8277
+I0126 23:05:23.786823 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 42
+I0126 23:05:23.786829 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 33
+I0126 23:05:23.786833 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 179
+I0126 23:05:23.786834 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 96
+I0126 23:05:23.786839 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:05:23.786844 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:05:23.786847 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.600151 (* 1 = 0.600151 loss)
+I0126 23:05:23.786850 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.227549 (* 1 = 0.227549 loss)
+I0126 23:05:23.786854 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 89303
+I0126 23:05:23.786856 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 56968
+I0126 23:05:23.786861 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 285507
+I0126 23:05:23.786866 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 128572
+I0126 23:05:23.786871 24753 solver.cpp:461] Iteration 1600, lr = 0.001
+I0126 23:11:22.589712 24753 solver.cpp:189] Iteration 1700, loss = 0.658892
+I0126 23:11:22.589761 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 26
+I0126 23:11:22.589768 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 31
+I0126 23:11:22.589773 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 186
+I0126 23:11:22.589777 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 107
+I0126 23:11:22.589785 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:11:22.589792 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:11:22.589797 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.334479 (* 1 = 0.334479 loss)
+I0126 23:11:22.589804 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.324413 (* 1 = 0.324413 loss)
+I0126 23:11:22.589809 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 92735
+I0126 23:11:22.589812 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 60431
+I0126 23:11:22.589815 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 303455
+I0126 23:11:22.589818 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 138729
+I0126 23:11:22.589821 24753 solver.cpp:461] Iteration 1700, lr = 0.001
+I0126 23:14:18.434978 24753 solver.cpp:269] Iteration 1750, Testing net (#0)
+I0126 23:14:57.832020 24753 solver.cpp:318]     Test net output #0: 1_accuracy = 0.1
+I0126 23:14:57.832067 24753 solver.cpp:318]     Test net output #1: 2_accuracy = 0.1
+I0126 23:14:57.832072 24753 solver.cpp:318]     Test net output #2: 3_accuracy = 0.4138
+I0126 23:14:57.832074 24753 solver.cpp:318]     Test net output #3: 4_accuracy = 0.2521
+I0126 23:14:57.832077 24753 solver.cpp:318]     Test net output #4: oracle accuracy = 0.8639
+I0126 23:17:58.120990 24753 solver.cpp:189] Iteration 1800, loss = 0.811685
+I0126 23:17:58.121037 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 32
+I0126 23:17:58.121042 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 29
+I0126 23:17:58.121045 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 192
+I0126 23:17:58.121047 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 97
+I0126 23:17:58.121052 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:17:58.121057 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:17:58.121060 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.402174 (* 1 = 0.402174 loss)
+I0126 23:17:58.121063 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.40951 (* 1 = 0.40951 loss)
+I0126 23:17:58.121067 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 96251
+I0126 23:17:58.121069 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 63956
+I0126 23:17:58.121073 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 321297
+I0126 23:17:58.121075 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 148846
+I0126 23:17:58.121078 24753 solver.cpp:461] Iteration 1800, lr = 0.001
+I0126 23:23:56.906189 24753 solver.cpp:189] Iteration 1900, loss = 0.689646
+I0126 23:23:56.906227 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 31
+I0126 23:23:56.906232 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 43
+I0126 23:23:56.906235 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 173
+I0126 23:23:56.906239 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 103
+I0126 23:23:56.906242 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:23:56.906246 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:23:56.906250 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.409266 (* 1 = 0.409266 loss)
+I0126 23:23:56.906253 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.28038 (* 1 = 0.28038 loss)
+I0126 23:23:56.906256 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 99804
+I0126 23:23:56.906258 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 67472
+I0126 23:23:56.906261 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 338982
+I0126 23:23:56.906265 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 159092
+I0126 23:23:56.906267 24753 solver.cpp:461] Iteration 1900, lr = 0.001
+I0126 23:29:55.650548 24753 solver.cpp:189] Iteration 2000, loss = 0.584935
+I0126 23:29:55.650629 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 28
+I0126 23:29:55.650635 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 36
+I0126 23:29:55.650638 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 189
+I0126 23:29:55.650640 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 97
+I0126 23:29:55.650645 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:29:55.650652 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:29:55.650658 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.283524 (* 1 = 0.283524 loss)
+I0126 23:29:55.650665 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.301412 (* 1 = 0.301412 loss)
+I0126 23:29:55.650682 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 103285
+I0126 23:29:55.650689 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 70955
+I0126 23:29:55.650694 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 356950
+I0126 23:29:55.650698 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 169160
+I0126 23:29:55.650704 24753 solver.cpp:461] Iteration 2000, lr = 0.001
+I0126 23:35:54.398558 24753 solver.cpp:189] Iteration 2100, loss = 0.53291
+I0126 23:35:54.398599 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 38
+I0126 23:35:54.398605 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 39
+I0126 23:35:54.398607 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 175
+I0126 23:35:54.398610 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 98
+I0126 23:35:54.398615 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 3.76451e-08 (* 1 = 3.76451e-08 loss)
+I0126 23:35:54.398619 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:35:54.398623 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.319001 (* 1 = 0.319001 loss)
+I0126 23:35:54.398627 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.213909 (* 1 = 0.213909 loss)
+I0126 23:35:54.398629 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 106793
+I0126 23:35:54.398634 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 74437
+I0126 23:35:54.398639 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 374806
+I0126 23:35:54.398643 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 179314
+I0126 23:35:54.398649 24753 solver.cpp:461] Iteration 2100, lr = 0.001
+I0126 23:41:53.152387 24753 solver.cpp:189] Iteration 2200, loss = 0.593163
+I0126 23:41:53.152434 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 31
+I0126 23:41:53.152442 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 50
+I0126 23:41:53.152447 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 163
+I0126 23:41:53.152451 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 106
+I0126 23:41:53.152462 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:41:53.152467 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:41:53.152469 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.35956 (* 1 = 0.35956 loss)
+I0126 23:41:53.152473 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.233603 (* 1 = 0.233603 loss)
+I0126 23:41:53.152475 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 110311
+I0126 23:41:53.152478 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 77980
+I0126 23:41:53.152482 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 392521
+I0126 23:41:53.152483 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 189538
+I0126 23:41:53.152487 24753 solver.cpp:461] Iteration 2200, lr = 0.001
+I0126 23:47:51.741456 24753 solver.cpp:189] Iteration 2300, loss = 0.504798
+I0126 23:47:51.741513 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 33
+I0126 23:47:51.741518 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 34
+I0126 23:47:51.741521 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 182
+I0126 23:47:51.741524 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 101
+I0126 23:47:51.741530 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 2.81989e-05 (* 1 = 2.81989e-05 loss)
+I0126 23:47:51.741534 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:47:51.741538 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.280912 (* 1 = 0.280912 loss)
+I0126 23:47:51.741540 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.223858 (* 1 = 0.223858 loss)
+I0126 23:47:51.741544 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 113826
+I0126 23:47:51.741546 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 81439
+I0126 23:47:51.741549 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 410429
+I0126 23:47:51.741552 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 199656
+I0126 23:47:51.741555 24753 solver.cpp:461] Iteration 2300, lr = 0.001
+I0126 23:53:50.386749 24753 solver.cpp:189] Iteration 2400, loss = 0.614834
+I0126 23:53:50.386797 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 36
+I0126 23:53:50.386803 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 28
+I0126 23:53:50.386806 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 190
+I0126 23:53:50.386809 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 96
+I0126 23:53:50.386813 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:53:50.386817 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:53:50.386821 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.283234 (* 1 = 0.283234 loss)
+I0126 23:53:50.386824 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.3316 (* 1 = 0.3316 loss)
+I0126 23:53:50.386827 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 117312
+I0126 23:53:50.386831 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 84931
+I0126 23:53:50.386837 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 428323
+I0126 23:53:50.386840 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 209784
+I0126 23:53:50.386847 24753 solver.cpp:461] Iteration 2400, lr = 0.001
+I0126 23:59:49.106820 24753 solver.cpp:189] Iteration 2500, loss = 0.497934
+I0126 23:59:49.106869 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 36
+I0126 23:59:49.106878 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 41
+I0126 23:59:49.106883 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 163
+I0126 23:59:49.106887 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 110
+I0126 23:59:49.106895 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:59:49.106901 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0126 23:59:49.106909 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.268693 (* 1 = 0.268693 loss)
+I0126 23:59:49.106914 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.229241 (* 1 = 0.229241 loss)
+I0126 23:59:49.106920 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 120827
+I0126 23:59:49.106925 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 88482
+I0126 23:59:49.106930 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 446077
+I0126 23:59:49.106935 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 219964
+I0126 23:59:49.106940 24753 solver.cpp:461] Iteration 2500, lr = 0.001
+I0127 00:05:46.242877 24753 solver.cpp:189] Iteration 2600, loss = 0.474042
+I0127 00:05:46.242938 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 42
+I0127 00:05:46.242946 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 33
+I0127 00:05:46.242951 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 180
+I0127 00:05:46.242955 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 95
+I0127 00:05:46.242964 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:05:46.242982 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:05:46.242990 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.343979 (* 1 = 0.343979 loss)
+I0127 00:05:46.242996 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.130063 (* 1 = 0.130063 loss)
+I0127 00:05:46.243010 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 124357
+I0127 00:05:46.243016 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 91968
+I0127 00:05:46.243021 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 463933
+I0127 00:05:46.243026 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 230092
+I0127 00:05:46.243041 24753 solver.cpp:461] Iteration 2600, lr = 0.001
+I0127 00:11:44.962770 24753 solver.cpp:189] Iteration 2700, loss = 0.446938
+I0127 00:11:44.962815 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 26
+I0127 00:11:44.962823 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 31
+I0127 00:11:44.962827 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 185
+I0127 00:11:44.962832 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 108
+I0127 00:11:44.962843 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:11:44.962851 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:11:44.962858 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.263503 (* 1 = 0.263503 loss)
+I0127 00:11:44.962864 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.183435 (* 1 = 0.183435 loss)
+I0127 00:11:44.962870 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 127789
+I0127 00:11:44.962877 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 95431
+I0127 00:11:44.962882 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 481917
+I0127 00:11:44.962888 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 240213
+I0127 00:11:44.962893 24753 solver.cpp:461] Iteration 2700, lr = 0.001
+I0127 00:17:43.771721 24753 solver.cpp:189] Iteration 2800, loss = 0.565665
+I0127 00:17:43.771759 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 32
+I0127 00:17:43.771764 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 29
+I0127 00:17:43.771767 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 194
+I0127 00:17:43.771771 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 95
+I0127 00:17:43.771776 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:17:43.771780 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:17:43.771783 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.308799 (* 1 = 0.308799 loss)
+I0127 00:17:43.771786 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.256866 (* 1 = 0.256866 loss)
+I0127 00:17:43.771790 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 131305
+I0127 00:17:43.771792 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 98956
+I0127 00:17:43.771795 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 499788
+I0127 00:17:43.771797 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 250301
+I0127 00:17:43.771801 24753 solver.cpp:461] Iteration 2800, lr = 0.001
+I0127 00:23:42.169013 24753 solver.cpp:189] Iteration 2900, loss = 0.450906
+I0127 00:23:42.169091 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 31
+I0127 00:23:42.169101 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 43
+I0127 00:23:42.169106 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 172
+I0127 00:23:42.169111 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 104
+I0127 00:23:42.169119 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:23:42.169147 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:23:42.169155 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.301954 (* 1 = 0.301954 loss)
+I0127 00:23:42.169162 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.148952 (* 1 = 0.148952 loss)
+I0127 00:23:42.169167 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 134859
+I0127 00:23:42.169172 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 102472
+I0127 00:23:42.169176 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 517483
+I0127 00:23:42.169191 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 260536
+I0127 00:23:42.169198 24753 solver.cpp:461] Iteration 2900, lr = 0.001
+I0127 00:29:41.037156 24753 solver.cpp:189] Iteration 3000, loss = 0.362947
+I0127 00:29:41.037209 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 28
+I0127 00:29:41.037217 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 36
+I0127 00:29:41.037222 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 189
+I0127 00:29:41.037227 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 97
+I0127 00:29:41.037235 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:29:41.037245 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:29:41.037251 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.199198 (* 1 = 0.199198 loss)
+I0127 00:29:41.037257 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.163749 (* 1 = 0.163749 loss)
+I0127 00:29:41.037262 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 138340
+I0127 00:29:41.037267 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 105955
+I0127 00:29:41.037272 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 535447
+I0127 00:29:41.037277 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 270608
+I0127 00:29:41.037283 24753 solver.cpp:461] Iteration 3000, lr = 0.001
+I0127 00:35:39.945986 24753 solver.cpp:189] Iteration 3100, loss = 0.454566
+I0127 00:35:39.946041 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 38
+I0127 00:35:39.946050 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 39
+I0127 00:35:39.946054 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 175
+I0127 00:35:39.946059 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 98
+I0127 00:35:39.946069 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 2.48469e-06 (* 1 = 2.48469e-06 loss)
+I0127 00:35:39.946077 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:35:39.946084 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.25013 (* 1 = 0.25013 loss)
+I0127 00:35:39.946090 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.204433 (* 1 = 0.204433 loss)
+I0127 00:35:39.946095 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 141849
+I0127 00:35:39.946100 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 109437
+I0127 00:35:39.946105 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 553298
+I0127 00:35:39.946110 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 280766
+I0127 00:35:39.946115 24753 solver.cpp:461] Iteration 3100, lr = 0.001
+I0127 00:41:38.777341 24753 solver.cpp:189] Iteration 3200, loss = 0.461831
+I0127 00:41:38.777402 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 31
+I0127 00:41:38.777410 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 50
+I0127 00:41:38.777413 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 163
+I0127 00:41:38.777415 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 106
+I0127 00:41:38.777420 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:41:38.777425 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:41:38.777428 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.312229 (* 1 = 0.312229 loss)
+I0127 00:41:38.777431 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.149602 (* 1 = 0.149602 loss)
+I0127 00:41:38.777433 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 145368
+I0127 00:41:38.777439 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 112980
+I0127 00:41:38.777444 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 570999
+I0127 00:41:38.777448 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 291003
+I0127 00:41:38.777467 24753 solver.cpp:461] Iteration 3200, lr = 0.001
+I0127 00:47:37.652086 24753 solver.cpp:189] Iteration 3300, loss = 0.323801
+I0127 00:47:37.652149 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 33
+I0127 00:47:37.652158 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 34
+I0127 00:47:37.652163 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 183
+I0127 00:47:37.652166 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 100
+I0127 00:47:37.652175 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0.00028077 (* 1 = 0.00028077 loss)
+I0127 00:47:37.652182 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:47:37.652189 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.168897 (* 1 = 0.168897 loss)
+I0127 00:47:37.652195 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.154623 (* 1 = 0.154623 loss)
+I0127 00:47:37.652200 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 148886
+I0127 00:47:37.652205 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 116439
+I0127 00:47:37.652210 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 588897
+I0127 00:47:37.652215 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 301128
+I0127 00:47:37.652220 24753 solver.cpp:461] Iteration 3300, lr = 0.001
+I0127 00:53:36.508196 24753 solver.cpp:189] Iteration 3400, loss = 0.443162
+I0127 00:53:36.508245 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 36
+I0127 00:53:36.508254 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 28
+I0127 00:53:36.508257 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 191
+I0127 00:53:36.508262 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 95
+I0127 00:53:36.508270 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:53:36.508280 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 00:53:36.508283 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.247772 (* 1 = 0.247772 loss)
+I0127 00:53:36.508286 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.19539 (* 1 = 0.19539 loss)
+I0127 00:53:36.508289 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 152374
+I0127 00:53:36.508292 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 119931
+I0127 00:53:36.508296 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 606779
+I0127 00:53:36.508297 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 311266
+I0127 00:53:36.508301 24753 solver.cpp:461] Iteration 3400, lr = 0.001
+I0127 00:59:31.845473 24753 solver.cpp:269] Iteration 3500, Testing net (#0)
+I0127 01:00:11.169951 24753 solver.cpp:318]     Test net output #0: 1_accuracy = 0.1
+I0127 01:00:11.169999 24753 solver.cpp:318]     Test net output #1: 2_accuracy = 0.1
+I0127 01:00:11.170004 24753 solver.cpp:318]     Test net output #2: 3_accuracy = 0.4246
+I0127 01:00:11.170007 24753 solver.cpp:318]     Test net output #3: 4_accuracy = 0.2548
+I0127 01:00:11.170011 24753 solver.cpp:318]     Test net output #4: oracle accuracy = 0.8757
+I0127 01:00:14.313172 24753 solver.cpp:189] Iteration 3500, loss = 0.323122
+I0127 01:00:14.313194 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 36
+I0127 01:00:14.313197 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 41
+I0127 01:00:14.313200 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 162
+I0127 01:00:14.313204 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 111
+I0127 01:00:14.313208 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:00:14.313212 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:00:14.313215 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.23361 (* 1 = 0.23361 loss)
+I0127 01:00:14.313220 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.0895127 (* 1 = 0.0895127 loss)
+I0127 01:00:14.313222 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 155889
+I0127 01:00:14.313225 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 123482
+I0127 01:00:14.313228 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 624516
+I0127 01:00:14.313231 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 321463
+I0127 01:00:14.313235 24753 solver.cpp:461] Iteration 3500, lr = 0.001
+I0127 01:06:05.255218 24753 solver.cpp:189] Iteration 3600, loss = 0.367022
+I0127 01:06:05.255264 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 42
+I0127 01:06:05.255270 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 33
+I0127 01:06:05.255273 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 179
+I0127 01:06:05.255276 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 96
+I0127 01:06:05.255281 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:06:05.255285 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:06:05.255288 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.323783 (* 1 = 0.323783 loss)
+I0127 01:06:05.255292 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.0432385 (* 1 = 0.0432385 loss)
+I0127 01:06:05.255295 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 159422
+I0127 01:06:05.255298 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 126968
+I0127 01:06:05.255301 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 642334
+I0127 01:06:05.255303 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 331626
+I0127 01:06:05.255306 24753 solver.cpp:461] Iteration 3600, lr = 0.001
+I0127 01:10:02.246635 24753 solver.cpp:189] Iteration 3700, loss = 0.386172
+I0127 01:10:02.246698 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 26
+I0127 01:10:02.246704 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 31
+I0127 01:10:02.246708 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 185
+I0127 01:10:02.246711 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 108
+I0127 01:10:02.246716 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:10:02.246719 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:10:02.246723 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.226948 (* 1 = 0.226948 loss)
+I0127 01:10:02.246726 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.159224 (* 1 = 0.159224 loss)
+I0127 01:10:02.246729 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 162858
+I0127 01:10:02.246732 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 130431
+I0127 01:10:02.246736 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 660293
+I0127 01:10:02.246737 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 341768
+I0127 01:10:02.246740 24753 solver.cpp:461] Iteration 3700, lr = 0.001
+I0127 01:13:59.238366 24753 solver.cpp:189] Iteration 3800, loss = 0.31508
+I0127 01:13:59.238417 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 32
+I0127 01:13:59.238423 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 29
+I0127 01:13:59.238426 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 192
+I0127 01:13:59.238428 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 97
+I0127 01:13:59.238433 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:13:59.238436 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:13:59.238440 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.202592 (* 1 = 0.202592 loss)
+I0127 01:13:59.238443 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.112488 (* 1 = 0.112488 loss)
+I0127 01:13:59.238446 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 166373
+I0127 01:13:59.238450 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 133956
+I0127 01:13:59.238451 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 678121
+I0127 01:13:59.238454 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 351900
+I0127 01:13:59.238457 24753 solver.cpp:461] Iteration 3800, lr = 0.001
+I0127 01:17:56.237982 24753 solver.cpp:189] Iteration 3900, loss = 0.35982
+I0127 01:17:56.238030 24753 solver.cpp:204]     Train net output #0: batch-instance-counts = 31
+I0127 01:17:56.238036 24753 solver.cpp:204]     Train net output #1: batch-instance-counts = 43
+I0127 01:17:56.238039 24753 solver.cpp:204]     Train net output #2: batch-instance-counts = 173
+I0127 01:17:56.238042 24753 solver.cpp:204]     Train net output #3: batch-instance-counts = 103
+I0127 01:17:56.238046 24753 solver.cpp:204]     Train net output #4: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:17:56.238050 24753 solver.cpp:204]     Train net output #5: multiple-output loss = 0 (* 1 = 0 loss)
+I0127 01:17:56.238054 24753 solver.cpp:204]     Train net output #6: multiple-output loss = 0.2465 (* 1 = 0.2465 loss)
+I0127 01:17:56.238057 24753 solver.cpp:204]     Train net output #7: multiple-output loss = 0.11332 (* 1 = 0.11332 loss)
+I0127 01:17:56.238060 24753 solver.cpp:204]     Train net output #8: train-instance-counts = 169929
+I0127 01:17:56.238064 24753 solver.cpp:204]     Train net output #9: train-instance-counts = 137472
+I0127 01:17:56.238065 24753 solver.cpp:204]     Train net output #10: train-instance-counts = 695792
+I0127 01:17:56.238068 24753 solver.cpp:204]     Train net output #11: train-instance-counts = 362157
+I0127 01:17:56.238071 24753 solver.cpp:461] Iteration 3900, lr = 0.001
+I0127 01:21:50.972616 24753 solver.cpp:336] Snapshotting to /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/run1/mcl_cifar10_quick_iter_4000.caffemodel
+I0127 01:21:51.012895 24753 solver.cpp:344] Snapshotting solver state to /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_inst_dist_experiments/4_models/run1/mcl_cifar10_quick_iter_4000.solverstate
+I0127 01:21:51.765671 24753 solver.cpp:251] Iteration 4000, loss = 0.332409
+I0127 01:21:51.765691 24753 solver.cpp:256] Optimization Done.
+I0127 01:21:51.765693 24753 caffe.cpp:134] Optimization Done.

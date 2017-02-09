@@ -267,7 +267,7 @@ message ParamSpec {
 // NOTE
 // Update the next available ID when you add a new LayerParameter field.
 //
-// LayerParameter next available layer-specific ID: 134 (last added: reshape_param)
+// LayerParameter next available layer-specific ID: 136 (last added: odsp_param)
 message LayerParameter {
   optional string name = 1; // the layer name
   optional string type = 2; // the layer type
@@ -347,6 +347,8 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional WindowDataParameter window_data_param = 129;
   optional MCLParameter mcl_param = 45;
+  optional ODParameter od_param = 134;
+  optional ODSPParameter odsp_param = 135;
   optional SequentialMCLParameter seq_mcl_param = 46;
 }
 
@@ -618,6 +620,21 @@ message LRNParameter {
 
 message MCLParameter {
   optional uint32 hard_k = 2 [default = 1];
+}
+
+message ODParameter {
+  optional float start_rand_award = 1 [default = 0.5];
+  optional bool rand_select = 2 [default = true];
+  optional bool decrease_rand = 3 [default = false];
+  optional bool draw_m_minus_one = 4 [default = false];
+  optional float rand_decay = 5 [default = 0.01];
+  optional bool award_all = 6 [default = false];
+}
+
+message ODSPParameter {
+  optional float temp_decay = 1 [default = 0.001];
+  optional uint32 update_k_models = 2 [default = 1];
+  optional float temp = 3 [default = 2];
 }
 
 message SequentialMCLParameter {

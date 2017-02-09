@@ -1,0 +1,33 @@
+I0208 13:54:31.619861 17307 caffe.cpp:113] Use GPU with device ID 0
+I0208 13:54:31.728173 17307 caffe.cpp:121] Starting Optimization
+I0208 13:54:31.728252 17307 solver.cpp:32] Initializing solver from parameters: 
+test_iter: 100
+test_interval: 1000
+base_lr: 0.0001
+display: 100
+max_iter: 5000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.004
+snapshot: 5000
+snapshot_prefix: "/home/mike/ml_lab/mod/MCL_Caffe/iccv_17/stochpool_alg7/4_models/run1/mcl_cifar10_quick"
+solver_mode: GPU
+net: "/home/mike/ml_lab/mod/MCL_Caffe/iccv_17/stochpool_alg7/4_models/mcl_cifar10_quick_train_test.prototxt"
+I0208 13:54:31.728277 17307 solver.cpp:70] Creating training net from net file: /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/stochpool_alg7/4_models/mcl_cifar10_quick_train_test.prototxt
+[libprotobuf ERROR google/protobuf/text_format.cc:245] Error parsing text-format caffe.NetParameter: 819:13: Message type "caffe.LayerParameter" has no field named "odps_param".
+F0208 13:54:31.728961 17307 upgrade_proto.cpp:928] Check failed: ReadProtoFromTextFile(param_file, param) Failed to parse NetParameter file: /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/stochpool_alg7/4_models/mcl_cifar10_quick_train_test.prototxt
+*** Check failure stack trace: ***
+    @     0x7fb207f12daa  (unknown)
+    @     0x7fb207f12ce4  (unknown)
+    @     0x7fb207f126e6  (unknown)
+    @     0x7fb207f15687  (unknown)
+    @     0x7fb20836143e  caffe::ReadNetParamsFromTextFileOrDie()
+    @     0x7fb2082940e2  caffe::Solver<>::InitTrainNet()
+    @     0x7fb208294fd3  caffe::Solver<>::Init()
+    @     0x7fb2082951a6  caffe::Solver<>::Solver()
+    @           0x40c560  caffe::GetSolver<>()
+    @           0x4065a1  train()
+    @           0x404b41  main
+    @     0x7fb207424f45  (unknown)
+    @           0x4050ed  (unknown)
+    @              (nil)  (unknown)

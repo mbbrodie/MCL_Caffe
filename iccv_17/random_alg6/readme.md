@@ -1,0 +1,1 @@
+alg6: Award best and draw $M-1$ uniform random numbers (one for each of the $j$ non-winning models). Update models where $p_j < r$. In other words, we randomly sample a number from 0 to 1 for each of the non-winners. If that number falls below the current value of $r$, we update that particular model.

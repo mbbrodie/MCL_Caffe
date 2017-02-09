@@ -1,0 +1,1 @@
+alg7: update a single model that the output layer selects according to a multinomial distribution. We base the distribution on the ensemble softmax outputs for the current target class. We also introduce a temperature parameter, \tau, that starts high to encourage more random weight updates and gradually decreases throughout training.

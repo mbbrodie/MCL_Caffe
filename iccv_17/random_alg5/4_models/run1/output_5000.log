@@ -1,0 +1,2578 @@
+I0208 11:17:29.900636  7411 caffe.cpp:113] Use GPU with device ID 0
+I0208 11:17:30.229641  7411 caffe.cpp:121] Starting Optimization
+I0208 11:17:30.229707  7411 solver.cpp:32] Initializing solver from parameters: 
+test_iter: 100
+test_interval: 1000
+base_lr: 0.0001
+display: 100
+max_iter: 5000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.004
+snapshot: 5000
+snapshot_prefix: "/home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/run1/mcl_cifar10_quick"
+solver_mode: GPU
+net: "/home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/mcl_cifar10_quick_train_test.prototxt"
+I0208 11:17:30.229727  7411 solver.cpp:70] Creating training net from net file: /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/mcl_cifar10_quick_train_test.prototxt
+I0208 11:17:30.230494  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer cifar
+I0208 11:17:30.230518  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 1_accuracy
+I0208 11:17:30.230520  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 2_accuracy
+I0208 11:17:30.230522  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 3_accuracy
+I0208 11:17:30.230525  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer 4_accuracy
+I0208 11:17:30.230526  7411 net.cpp:287] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0208 11:17:30.230696  7411 net.cpp:42] Initializing net from parameters: 
+name: "CIFAR10_quick"
+state {
+  phase: TRAIN
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mean_file: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_train_lmdb"
+    batch_size: 350
+    backend: LMDB
+  }
+}
+layer {
+  name: "1_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "1_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_pool1"
+  type: "Pooling"
+  bottom: "1_conv1"
+  top: "1_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_relu1"
+  type: "ReLU"
+  bottom: "1_pool1"
+  top: "1_pool1"
+}
+layer {
+  name: "1_conv2"
+  type: "Convolution"
+  bottom: "1_pool1"
+  top: "1_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu2"
+  type: "ReLU"
+  bottom: "1_conv2"
+  top: "1_conv2"
+}
+layer {
+  name: "1_pool2"
+  type: "Pooling"
+  bottom: "1_conv2"
+  top: "1_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_conv3"
+  type: "Convolution"
+  bottom: "1_pool2"
+  top: "1_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu3"
+  type: "ReLU"
+  bottom: "1_conv3"
+  top: "1_conv3"
+}
+layer {
+  name: "1_pool3"
+  type: "Pooling"
+  bottom: "1_conv3"
+  top: "1_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_ip1"
+  type: "InnerProduct"
+  bottom: "1_pool3"
+  top: "1_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_ip2"
+  type: "InnerProduct"
+  bottom: "1_ip1"
+  top: "1_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_prob"
+  type: "Softmax"
+  bottom: "1_ip2"
+  top: "1_prob"
+}
+layer {
+  name: "2_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "2_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_pool1"
+  type: "Pooling"
+  bottom: "2_conv1"
+  top: "2_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_relu1"
+  type: "ReLU"
+  bottom: "2_pool1"
+  top: "2_pool1"
+}
+layer {
+  name: "2_conv2"
+  type: "Convolution"
+  bottom: "2_pool1"
+  top: "2_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu2"
+  type: "ReLU"
+  bottom: "2_conv2"
+  top: "2_conv2"
+}
+layer {
+  name: "2_pool2"
+  type: "Pooling"
+  bottom: "2_conv2"
+  top: "2_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_conv3"
+  type: "Convolution"
+  bottom: "2_pool2"
+  top: "2_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu3"
+  type: "ReLU"
+  bottom: "2_conv3"
+  top: "2_conv3"
+}
+layer {
+  name: "2_pool3"
+  type: "Pooling"
+  bottom: "2_conv3"
+  top: "2_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_ip1"
+  type: "InnerProduct"
+  bottom: "2_pool3"
+  top: "2_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_ip2"
+  type: "InnerProduct"
+  bottom: "2_ip1"
+  top: "2_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_prob"
+  type: "Softmax"
+  bottom: "2_ip2"
+  top: "2_prob"
+}
+layer {
+  name: "3_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "3_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_pool1"
+  type: "Pooling"
+  bottom: "3_conv1"
+  top: "3_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_relu1"
+  type: "ReLU"
+  bottom: "3_pool1"
+  top: "3_pool1"
+}
+layer {
+  name: "3_conv2"
+  type: "Convolution"
+  bottom: "3_pool1"
+  top: "3_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu2"
+  type: "ReLU"
+  bottom: "3_conv2"
+  top: "3_conv2"
+}
+layer {
+  name: "3_pool2"
+  type: "Pooling"
+  bottom: "3_conv2"
+  top: "3_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_conv3"
+  type: "Convolution"
+  bottom: "3_pool2"
+  top: "3_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu3"
+  type: "ReLU"
+  bottom: "3_conv3"
+  top: "3_conv3"
+}
+layer {
+  name: "3_pool3"
+  type: "Pooling"
+  bottom: "3_conv3"
+  top: "3_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_ip1"
+  type: "InnerProduct"
+  bottom: "3_pool3"
+  top: "3_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_ip2"
+  type: "InnerProduct"
+  bottom: "3_ip1"
+  top: "3_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_prob"
+  type: "Softmax"
+  bottom: "3_ip2"
+  top: "3_prob"
+}
+layer {
+  name: "4_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "4_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_pool1"
+  type: "Pooling"
+  bottom: "4_conv1"
+  top: "4_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_relu1"
+  type: "ReLU"
+  bottom: "4_pool1"
+  top: "4_pool1"
+}
+layer {
+  name: "4_conv2"
+  type: "Convolution"
+  bottom: "4_pool1"
+  top: "4_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu2"
+  type: "ReLU"
+  bottom: "4_conv2"
+  top: "4_conv2"
+}
+layer {
+  name: "4_pool2"
+  type: "Pooling"
+  bottom: "4_conv2"
+  top: "4_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_conv3"
+  type: "Convolution"
+  bottom: "4_pool2"
+  top: "4_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu3"
+  type: "ReLU"
+  bottom: "4_conv3"
+  top: "4_conv3"
+}
+layer {
+  name: "4_pool3"
+  type: "Pooling"
+  bottom: "4_conv3"
+  top: "4_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_ip1"
+  type: "InnerProduct"
+  bottom: "4_pool3"
+  top: "4_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_ip2"
+  type: "InnerProduct"
+  bottom: "4_ip1"
+  top: "4_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_prob"
+  type: "Softmax"
+  bottom: "4_ip2"
+  top: "4_prob"
+}
+layer {
+  name: "loss"
+  type: "ODRandomAwardBMultinomialLogisticLoss"
+  bottom: "1_prob"
+  bottom: "2_prob"
+  bottom: "3_prob"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "multiple-output loss"
+  top: "batch-instance-counts"
+  top: "train-instance-counts"
+  top: "curr-b-value"
+  loss_weight: 1
+  loss_weight: 0
+  loss_weight: 0
+  loss_weight: 0
+  include {
+    phase: TRAIN
+  }
+  od_param {
+    start_rand_award: 0.5
+    rand_select: true
+    decrease_rand: true
+    draw_m_minus_one: false
+    rand_decay: 0.001
+    award_all: false
+  }
+}
+I0208 11:17:30.230859  7411 layer_factory.hpp:74] Creating layer cifar
+I0208 11:17:30.230872  7411 net.cpp:90] Creating Layer cifar
+I0208 11:17:30.230877  7411 net.cpp:368] cifar -> data
+I0208 11:17:30.230901  7411 net.cpp:368] cifar -> label
+I0208 11:17:30.230908  7411 net.cpp:120] Setting up cifar
+I0208 11:17:30.230948  7411 db.cpp:34] Opened lmdb /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_train_lmdb
+I0208 11:17:30.230983  7411 data_layer.cpp:67] output data size: 350,3,32,32
+I0208 11:17:30.230989  7411 data_transformer.cpp:22] Loading mean file from: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto
+I0208 11:17:30.231714  7411 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0208 11:17:30.231722  7411 net.cpp:127] Top shape: 350 (350)
+I0208 11:17:30.231727  7411 layer_factory.hpp:74] Creating layer data_cifar_0_split
+I0208 11:17:30.231736  7411 net.cpp:90] Creating Layer data_cifar_0_split
+I0208 11:17:30.231741  7411 net.cpp:410] data_cifar_0_split <- data
+I0208 11:17:30.231752  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_0
+I0208 11:17:30.231763  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_1
+I0208 11:17:30.231771  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_2
+I0208 11:17:30.231778  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_3
+I0208 11:17:30.231786  7411 net.cpp:120] Setting up data_cifar_0_split
+I0208 11:17:30.231794  7411 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0208 11:17:30.231801  7411 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0208 11:17:30.231806  7411 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0208 11:17:30.231809  7411 net.cpp:127] Top shape: 350 3 32 32 (1075200)
+I0208 11:17:30.231812  7411 layer_factory.hpp:74] Creating layer 1_conv1
+I0208 11:17:30.231822  7411 net.cpp:90] Creating Layer 1_conv1
+I0208 11:17:30.231827  7411 net.cpp:410] 1_conv1 <- data_cifar_0_split_0
+I0208 11:17:30.231834  7411 net.cpp:368] 1_conv1 -> 1_conv1
+I0208 11:17:30.231843  7411 net.cpp:120] Setting up 1_conv1
+I0208 11:17:30.232247  7411 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0208 11:17:30.232259  7411 layer_factory.hpp:74] Creating layer 1_pool1
+I0208 11:17:30.232265  7411 net.cpp:90] Creating Layer 1_pool1
+I0208 11:17:30.232270  7411 net.cpp:410] 1_pool1 <- 1_conv1
+I0208 11:17:30.232275  7411 net.cpp:368] 1_pool1 -> 1_pool1
+I0208 11:17:30.232281  7411 net.cpp:120] Setting up 1_pool1
+I0208 11:17:30.232295  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.232300  7411 layer_factory.hpp:74] Creating layer 1_relu1
+I0208 11:17:30.232309  7411 net.cpp:90] Creating Layer 1_relu1
+I0208 11:17:30.232312  7411 net.cpp:410] 1_relu1 <- 1_pool1
+I0208 11:17:30.232317  7411 net.cpp:357] 1_relu1 -> 1_pool1 (in-place)
+I0208 11:17:30.232322  7411 net.cpp:120] Setting up 1_relu1
+I0208 11:17:30.232329  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.232332  7411 layer_factory.hpp:74] Creating layer 1_conv2
+I0208 11:17:30.232339  7411 net.cpp:90] Creating Layer 1_conv2
+I0208 11:17:30.232342  7411 net.cpp:410] 1_conv2 <- 1_pool1
+I0208 11:17:30.232347  7411 net.cpp:368] 1_conv2 -> 1_conv2
+I0208 11:17:30.232354  7411 net.cpp:120] Setting up 1_conv2
+I0208 11:17:30.232952  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.232960  7411 layer_factory.hpp:74] Creating layer 1_relu2
+I0208 11:17:30.232966  7411 net.cpp:90] Creating Layer 1_relu2
+I0208 11:17:30.232969  7411 net.cpp:410] 1_relu2 <- 1_conv2
+I0208 11:17:30.232975  7411 net.cpp:357] 1_relu2 -> 1_conv2 (in-place)
+I0208 11:17:30.232978  7411 net.cpp:120] Setting up 1_relu2
+I0208 11:17:30.232983  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.232987  7411 layer_factory.hpp:74] Creating layer 1_pool2
+I0208 11:17:30.232991  7411 net.cpp:90] Creating Layer 1_pool2
+I0208 11:17:30.232995  7411 net.cpp:410] 1_pool2 <- 1_conv2
+I0208 11:17:30.233001  7411 net.cpp:368] 1_pool2 -> 1_pool2
+I0208 11:17:30.233006  7411 net.cpp:120] Setting up 1_pool2
+I0208 11:17:30.233012  7411 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0208 11:17:30.233016  7411 layer_factory.hpp:74] Creating layer 1_conv3
+I0208 11:17:30.233024  7411 net.cpp:90] Creating Layer 1_conv3
+I0208 11:17:30.233027  7411 net.cpp:410] 1_conv3 <- 1_pool2
+I0208 11:17:30.233043  7411 net.cpp:368] 1_conv3 -> 1_conv3
+I0208 11:17:30.233052  7411 net.cpp:120] Setting up 1_conv3
+I0208 11:17:30.234249  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.234261  7411 layer_factory.hpp:74] Creating layer 1_relu3
+I0208 11:17:30.234266  7411 net.cpp:90] Creating Layer 1_relu3
+I0208 11:17:30.234269  7411 net.cpp:410] 1_relu3 <- 1_conv3
+I0208 11:17:30.234275  7411 net.cpp:357] 1_relu3 -> 1_conv3 (in-place)
+I0208 11:17:30.234280  7411 net.cpp:120] Setting up 1_relu3
+I0208 11:17:30.234285  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.234288  7411 layer_factory.hpp:74] Creating layer 1_pool3
+I0208 11:17:30.234293  7411 net.cpp:90] Creating Layer 1_pool3
+I0208 11:17:30.234297  7411 net.cpp:410] 1_pool3 <- 1_conv3
+I0208 11:17:30.234302  7411 net.cpp:368] 1_pool3 -> 1_pool3
+I0208 11:17:30.234307  7411 net.cpp:120] Setting up 1_pool3
+I0208 11:17:30.234313  7411 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0208 11:17:30.234316  7411 layer_factory.hpp:74] Creating layer 1_ip1
+I0208 11:17:30.234324  7411 net.cpp:90] Creating Layer 1_ip1
+I0208 11:17:30.234328  7411 net.cpp:410] 1_ip1 <- 1_pool3
+I0208 11:17:30.234333  7411 net.cpp:368] 1_ip1 -> 1_ip1
+I0208 11:17:30.234340  7411 net.cpp:120] Setting up 1_ip1
+I0208 11:17:30.235822  7411 net.cpp:127] Top shape: 350 64 (22400)
+I0208 11:17:30.235831  7411 layer_factory.hpp:74] Creating layer 1_ip2
+I0208 11:17:30.235837  7411 net.cpp:90] Creating Layer 1_ip2
+I0208 11:17:30.235841  7411 net.cpp:410] 1_ip2 <- 1_ip1
+I0208 11:17:30.235847  7411 net.cpp:368] 1_ip2 -> 1_ip2
+I0208 11:17:30.235853  7411 net.cpp:120] Setting up 1_ip2
+I0208 11:17:30.235880  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.235888  7411 layer_factory.hpp:74] Creating layer 1_prob
+I0208 11:17:30.235893  7411 net.cpp:90] Creating Layer 1_prob
+I0208 11:17:30.235896  7411 net.cpp:410] 1_prob <- 1_ip2
+I0208 11:17:30.235903  7411 net.cpp:368] 1_prob -> 1_prob
+I0208 11:17:30.235908  7411 net.cpp:120] Setting up 1_prob
+I0208 11:17:30.235918  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.235923  7411 layer_factory.hpp:74] Creating layer 2_conv1
+I0208 11:17:30.235929  7411 net.cpp:90] Creating Layer 2_conv1
+I0208 11:17:30.235932  7411 net.cpp:410] 2_conv1 <- data_cifar_0_split_1
+I0208 11:17:30.235939  7411 net.cpp:368] 2_conv1 -> 2_conv1
+I0208 11:17:30.235944  7411 net.cpp:120] Setting up 2_conv1
+I0208 11:17:30.236012  7411 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0208 11:17:30.236019  7411 layer_factory.hpp:74] Creating layer 2_pool1
+I0208 11:17:30.236024  7411 net.cpp:90] Creating Layer 2_pool1
+I0208 11:17:30.236027  7411 net.cpp:410] 2_pool1 <- 2_conv1
+I0208 11:17:30.236032  7411 net.cpp:368] 2_pool1 -> 2_pool1
+I0208 11:17:30.236039  7411 net.cpp:120] Setting up 2_pool1
+I0208 11:17:30.236047  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.236050  7411 layer_factory.hpp:74] Creating layer 2_relu1
+I0208 11:17:30.236057  7411 net.cpp:90] Creating Layer 2_relu1
+I0208 11:17:30.236063  7411 net.cpp:410] 2_relu1 <- 2_pool1
+I0208 11:17:30.236068  7411 net.cpp:357] 2_relu1 -> 2_pool1 (in-place)
+I0208 11:17:30.236073  7411 net.cpp:120] Setting up 2_relu1
+I0208 11:17:30.236078  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.236080  7411 layer_factory.hpp:74] Creating layer 2_conv2
+I0208 11:17:30.236086  7411 net.cpp:90] Creating Layer 2_conv2
+I0208 11:17:30.236089  7411 net.cpp:410] 2_conv2 <- 2_pool1
+I0208 11:17:30.236094  7411 net.cpp:368] 2_conv2 -> 2_conv2
+I0208 11:17:30.236100  7411 net.cpp:120] Setting up 2_conv2
+I0208 11:17:30.236699  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.236706  7411 layer_factory.hpp:74] Creating layer 2_relu2
+I0208 11:17:30.236711  7411 net.cpp:90] Creating Layer 2_relu2
+I0208 11:17:30.236714  7411 net.cpp:410] 2_relu2 <- 2_conv2
+I0208 11:17:30.236719  7411 net.cpp:357] 2_relu2 -> 2_conv2 (in-place)
+I0208 11:17:30.236724  7411 net.cpp:120] Setting up 2_relu2
+I0208 11:17:30.236728  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.236740  7411 layer_factory.hpp:74] Creating layer 2_pool2
+I0208 11:17:30.236747  7411 net.cpp:90] Creating Layer 2_pool2
+I0208 11:17:30.236749  7411 net.cpp:410] 2_pool2 <- 2_conv2
+I0208 11:17:30.236757  7411 net.cpp:368] 2_pool2 -> 2_pool2
+I0208 11:17:30.236762  7411 net.cpp:120] Setting up 2_pool2
+I0208 11:17:30.236768  7411 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0208 11:17:30.236771  7411 layer_factory.hpp:74] Creating layer 2_conv3
+I0208 11:17:30.236778  7411 net.cpp:90] Creating Layer 2_conv3
+I0208 11:17:30.236780  7411 net.cpp:410] 2_conv3 <- 2_pool2
+I0208 11:17:30.236786  7411 net.cpp:368] 2_conv3 -> 2_conv3
+I0208 11:17:30.236793  7411 net.cpp:120] Setting up 2_conv3
+I0208 11:17:30.237988  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.237996  7411 layer_factory.hpp:74] Creating layer 2_relu3
+I0208 11:17:30.238003  7411 net.cpp:90] Creating Layer 2_relu3
+I0208 11:17:30.238006  7411 net.cpp:410] 2_relu3 <- 2_conv3
+I0208 11:17:30.238011  7411 net.cpp:357] 2_relu3 -> 2_conv3 (in-place)
+I0208 11:17:30.238016  7411 net.cpp:120] Setting up 2_relu3
+I0208 11:17:30.238020  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.238024  7411 layer_factory.hpp:74] Creating layer 2_pool3
+I0208 11:17:30.238030  7411 net.cpp:90] Creating Layer 2_pool3
+I0208 11:17:30.238034  7411 net.cpp:410] 2_pool3 <- 2_conv3
+I0208 11:17:30.238039  7411 net.cpp:368] 2_pool3 -> 2_pool3
+I0208 11:17:30.238044  7411 net.cpp:120] Setting up 2_pool3
+I0208 11:17:30.238049  7411 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0208 11:17:30.238054  7411 layer_factory.hpp:74] Creating layer 2_ip1
+I0208 11:17:30.238059  7411 net.cpp:90] Creating Layer 2_ip1
+I0208 11:17:30.238061  7411 net.cpp:410] 2_ip1 <- 2_pool3
+I0208 11:17:30.238068  7411 net.cpp:368] 2_ip1 -> 2_ip1
+I0208 11:17:30.238075  7411 net.cpp:120] Setting up 2_ip1
+I0208 11:17:30.239553  7411 net.cpp:127] Top shape: 350 64 (22400)
+I0208 11:17:30.239562  7411 layer_factory.hpp:74] Creating layer 2_ip2
+I0208 11:17:30.239569  7411 net.cpp:90] Creating Layer 2_ip2
+I0208 11:17:30.239573  7411 net.cpp:410] 2_ip2 <- 2_ip1
+I0208 11:17:30.239579  7411 net.cpp:368] 2_ip2 -> 2_ip2
+I0208 11:17:30.239586  7411 net.cpp:120] Setting up 2_ip2
+I0208 11:17:30.239612  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.239619  7411 layer_factory.hpp:74] Creating layer 2_prob
+I0208 11:17:30.239624  7411 net.cpp:90] Creating Layer 2_prob
+I0208 11:17:30.239626  7411 net.cpp:410] 2_prob <- 2_ip2
+I0208 11:17:30.239632  7411 net.cpp:368] 2_prob -> 2_prob
+I0208 11:17:30.239639  7411 net.cpp:120] Setting up 2_prob
+I0208 11:17:30.239645  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.239648  7411 layer_factory.hpp:74] Creating layer 3_conv1
+I0208 11:17:30.239655  7411 net.cpp:90] Creating Layer 3_conv1
+I0208 11:17:30.239658  7411 net.cpp:410] 3_conv1 <- data_cifar_0_split_2
+I0208 11:17:30.239663  7411 net.cpp:368] 3_conv1 -> 3_conv1
+I0208 11:17:30.239670  7411 net.cpp:120] Setting up 3_conv1
+I0208 11:17:30.239737  7411 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0208 11:17:30.239743  7411 layer_factory.hpp:74] Creating layer 3_pool1
+I0208 11:17:30.239748  7411 net.cpp:90] Creating Layer 3_pool1
+I0208 11:17:30.239753  7411 net.cpp:410] 3_pool1 <- 3_conv1
+I0208 11:17:30.239758  7411 net.cpp:368] 3_pool1 -> 3_pool1
+I0208 11:17:30.239763  7411 net.cpp:120] Setting up 3_pool1
+I0208 11:17:30.239769  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.239773  7411 layer_factory.hpp:74] Creating layer 3_relu1
+I0208 11:17:30.239778  7411 net.cpp:90] Creating Layer 3_relu1
+I0208 11:17:30.239780  7411 net.cpp:410] 3_relu1 <- 3_pool1
+I0208 11:17:30.239786  7411 net.cpp:357] 3_relu1 -> 3_pool1 (in-place)
+I0208 11:17:30.239790  7411 net.cpp:120] Setting up 3_relu1
+I0208 11:17:30.239795  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.239799  7411 layer_factory.hpp:74] Creating layer 3_conv2
+I0208 11:17:30.239804  7411 net.cpp:90] Creating Layer 3_conv2
+I0208 11:17:30.239807  7411 net.cpp:410] 3_conv2 <- 3_pool1
+I0208 11:17:30.239812  7411 net.cpp:368] 3_conv2 -> 3_conv2
+I0208 11:17:30.239826  7411 net.cpp:120] Setting up 3_conv2
+I0208 11:17:30.240427  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.240433  7411 layer_factory.hpp:74] Creating layer 3_relu2
+I0208 11:17:30.240438  7411 net.cpp:90] Creating Layer 3_relu2
+I0208 11:17:30.240442  7411 net.cpp:410] 3_relu2 <- 3_conv2
+I0208 11:17:30.240447  7411 net.cpp:357] 3_relu2 -> 3_conv2 (in-place)
+I0208 11:17:30.240453  7411 net.cpp:120] Setting up 3_relu2
+I0208 11:17:30.240458  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.240461  7411 layer_factory.hpp:74] Creating layer 3_pool2
+I0208 11:17:30.240466  7411 net.cpp:90] Creating Layer 3_pool2
+I0208 11:17:30.240469  7411 net.cpp:410] 3_pool2 <- 3_conv2
+I0208 11:17:30.240474  7411 net.cpp:368] 3_pool2 -> 3_pool2
+I0208 11:17:30.240479  7411 net.cpp:120] Setting up 3_pool2
+I0208 11:17:30.240485  7411 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0208 11:17:30.240489  7411 layer_factory.hpp:74] Creating layer 3_conv3
+I0208 11:17:30.240499  7411 net.cpp:90] Creating Layer 3_conv3
+I0208 11:17:30.240504  7411 net.cpp:410] 3_conv3 <- 3_pool2
+I0208 11:17:30.240509  7411 net.cpp:368] 3_conv3 -> 3_conv3
+I0208 11:17:30.240515  7411 net.cpp:120] Setting up 3_conv3
+I0208 11:17:30.241706  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.241714  7411 layer_factory.hpp:74] Creating layer 3_relu3
+I0208 11:17:30.241720  7411 net.cpp:90] Creating Layer 3_relu3
+I0208 11:17:30.241724  7411 net.cpp:410] 3_relu3 <- 3_conv3
+I0208 11:17:30.241729  7411 net.cpp:357] 3_relu3 -> 3_conv3 (in-place)
+I0208 11:17:30.241734  7411 net.cpp:120] Setting up 3_relu3
+I0208 11:17:30.241739  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.241741  7411 layer_factory.hpp:74] Creating layer 3_pool3
+I0208 11:17:30.241747  7411 net.cpp:90] Creating Layer 3_pool3
+I0208 11:17:30.241750  7411 net.cpp:410] 3_pool3 <- 3_conv3
+I0208 11:17:30.241755  7411 net.cpp:368] 3_pool3 -> 3_pool3
+I0208 11:17:30.241760  7411 net.cpp:120] Setting up 3_pool3
+I0208 11:17:30.241766  7411 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0208 11:17:30.241770  7411 layer_factory.hpp:74] Creating layer 3_ip1
+I0208 11:17:30.241776  7411 net.cpp:90] Creating Layer 3_ip1
+I0208 11:17:30.241780  7411 net.cpp:410] 3_ip1 <- 3_pool3
+I0208 11:17:30.241786  7411 net.cpp:368] 3_ip1 -> 3_ip1
+I0208 11:17:30.241791  7411 net.cpp:120] Setting up 3_ip1
+I0208 11:17:30.243268  7411 net.cpp:127] Top shape: 350 64 (22400)
+I0208 11:17:30.243275  7411 layer_factory.hpp:74] Creating layer 3_ip2
+I0208 11:17:30.243283  7411 net.cpp:90] Creating Layer 3_ip2
+I0208 11:17:30.243286  7411 net.cpp:410] 3_ip2 <- 3_ip1
+I0208 11:17:30.243291  7411 net.cpp:368] 3_ip2 -> 3_ip2
+I0208 11:17:30.243297  7411 net.cpp:120] Setting up 3_ip2
+I0208 11:17:30.243326  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.243332  7411 layer_factory.hpp:74] Creating layer 3_prob
+I0208 11:17:30.243337  7411 net.cpp:90] Creating Layer 3_prob
+I0208 11:17:30.243341  7411 net.cpp:410] 3_prob <- 3_ip2
+I0208 11:17:30.243345  7411 net.cpp:368] 3_prob -> 3_prob
+I0208 11:17:30.243352  7411 net.cpp:120] Setting up 3_prob
+I0208 11:17:30.243361  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.243366  7411 layer_factory.hpp:74] Creating layer 4_conv1
+I0208 11:17:30.243374  7411 net.cpp:90] Creating Layer 4_conv1
+I0208 11:17:30.243377  7411 net.cpp:410] 4_conv1 <- data_cifar_0_split_3
+I0208 11:17:30.243383  7411 net.cpp:368] 4_conv1 -> 4_conv1
+I0208 11:17:30.243389  7411 net.cpp:120] Setting up 4_conv1
+I0208 11:17:30.243460  7411 net.cpp:127] Top shape: 350 32 32 32 (11468800)
+I0208 11:17:30.243466  7411 layer_factory.hpp:74] Creating layer 4_pool1
+I0208 11:17:30.243472  7411 net.cpp:90] Creating Layer 4_pool1
+I0208 11:17:30.243475  7411 net.cpp:410] 4_pool1 <- 4_conv1
+I0208 11:17:30.243480  7411 net.cpp:368] 4_pool1 -> 4_pool1
+I0208 11:17:30.243485  7411 net.cpp:120] Setting up 4_pool1
+I0208 11:17:30.243492  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.243495  7411 layer_factory.hpp:74] Creating layer 4_relu1
+I0208 11:17:30.243508  7411 net.cpp:90] Creating Layer 4_relu1
+I0208 11:17:30.243515  7411 net.cpp:410] 4_relu1 <- 4_pool1
+I0208 11:17:30.243520  7411 net.cpp:357] 4_relu1 -> 4_pool1 (in-place)
+I0208 11:17:30.243525  7411 net.cpp:120] Setting up 4_relu1
+I0208 11:17:30.243531  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.243535  7411 layer_factory.hpp:74] Creating layer 4_conv2
+I0208 11:17:30.243541  7411 net.cpp:90] Creating Layer 4_conv2
+I0208 11:17:30.243544  7411 net.cpp:410] 4_conv2 <- 4_pool1
+I0208 11:17:30.243549  7411 net.cpp:368] 4_conv2 -> 4_conv2
+I0208 11:17:30.243554  7411 net.cpp:120] Setting up 4_conv2
+I0208 11:17:30.244154  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.244164  7411 layer_factory.hpp:74] Creating layer 4_relu2
+I0208 11:17:30.244170  7411 net.cpp:90] Creating Layer 4_relu2
+I0208 11:17:30.244174  7411 net.cpp:410] 4_relu2 <- 4_conv2
+I0208 11:17:30.244179  7411 net.cpp:357] 4_relu2 -> 4_conv2 (in-place)
+I0208 11:17:30.244184  7411 net.cpp:120] Setting up 4_relu2
+I0208 11:17:30.244189  7411 net.cpp:127] Top shape: 350 32 16 16 (2867200)
+I0208 11:17:30.244192  7411 layer_factory.hpp:74] Creating layer 4_pool2
+I0208 11:17:30.244197  7411 net.cpp:90] Creating Layer 4_pool2
+I0208 11:17:30.244200  7411 net.cpp:410] 4_pool2 <- 4_conv2
+I0208 11:17:30.244206  7411 net.cpp:368] 4_pool2 -> 4_pool2
+I0208 11:17:30.244212  7411 net.cpp:120] Setting up 4_pool2
+I0208 11:17:30.244218  7411 net.cpp:127] Top shape: 350 32 8 8 (716800)
+I0208 11:17:30.244221  7411 layer_factory.hpp:74] Creating layer 4_conv3
+I0208 11:17:30.244228  7411 net.cpp:90] Creating Layer 4_conv3
+I0208 11:17:30.244232  7411 net.cpp:410] 4_conv3 <- 4_pool2
+I0208 11:17:30.244237  7411 net.cpp:368] 4_conv3 -> 4_conv3
+I0208 11:17:30.244242  7411 net.cpp:120] Setting up 4_conv3
+I0208 11:17:30.245438  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.245447  7411 layer_factory.hpp:74] Creating layer 4_relu3
+I0208 11:17:30.245452  7411 net.cpp:90] Creating Layer 4_relu3
+I0208 11:17:30.245456  7411 net.cpp:410] 4_relu3 <- 4_conv3
+I0208 11:17:30.245460  7411 net.cpp:357] 4_relu3 -> 4_conv3 (in-place)
+I0208 11:17:30.245466  7411 net.cpp:120] Setting up 4_relu3
+I0208 11:17:30.245471  7411 net.cpp:127] Top shape: 350 64 8 8 (1433600)
+I0208 11:17:30.245476  7411 layer_factory.hpp:74] Creating layer 4_pool3
+I0208 11:17:30.245481  7411 net.cpp:90] Creating Layer 4_pool3
+I0208 11:17:30.245483  7411 net.cpp:410] 4_pool3 <- 4_conv3
+I0208 11:17:30.245488  7411 net.cpp:368] 4_pool3 -> 4_pool3
+I0208 11:17:30.245493  7411 net.cpp:120] Setting up 4_pool3
+I0208 11:17:30.245499  7411 net.cpp:127] Top shape: 350 64 4 4 (358400)
+I0208 11:17:30.245503  7411 layer_factory.hpp:74] Creating layer 4_ip1
+I0208 11:17:30.245509  7411 net.cpp:90] Creating Layer 4_ip1
+I0208 11:17:30.245512  7411 net.cpp:410] 4_ip1 <- 4_pool3
+I0208 11:17:30.245518  7411 net.cpp:368] 4_ip1 -> 4_ip1
+I0208 11:17:30.245524  7411 net.cpp:120] Setting up 4_ip1
+I0208 11:17:30.247015  7411 net.cpp:127] Top shape: 350 64 (22400)
+I0208 11:17:30.247023  7411 layer_factory.hpp:74] Creating layer 4_ip2
+I0208 11:17:30.247030  7411 net.cpp:90] Creating Layer 4_ip2
+I0208 11:17:30.247033  7411 net.cpp:410] 4_ip2 <- 4_ip1
+I0208 11:17:30.247040  7411 net.cpp:368] 4_ip2 -> 4_ip2
+I0208 11:17:30.247046  7411 net.cpp:120] Setting up 4_ip2
+I0208 11:17:30.247074  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.247081  7411 layer_factory.hpp:74] Creating layer 4_prob
+I0208 11:17:30.247086  7411 net.cpp:90] Creating Layer 4_prob
+I0208 11:17:30.247089  7411 net.cpp:410] 4_prob <- 4_ip2
+I0208 11:17:30.247093  7411 net.cpp:368] 4_prob -> 4_prob
+I0208 11:17:30.247098  7411 net.cpp:120] Setting up 4_prob
+I0208 11:17:30.247107  7411 net.cpp:127] Top shape: 350 10 (3500)
+I0208 11:17:30.247110  7411 layer_factory.hpp:74] Creating layer loss
+I0208 11:17:30.247119  7411 net.cpp:90] Creating Layer loss
+I0208 11:17:30.247125  7411 net.cpp:410] loss <- 1_prob
+I0208 11:17:30.247129  7411 net.cpp:410] loss <- 2_prob
+I0208 11:17:30.247133  7411 net.cpp:410] loss <- 3_prob
+I0208 11:17:30.247144  7411 net.cpp:410] loss <- 4_prob
+I0208 11:17:30.247149  7411 net.cpp:410] loss <- label
+I0208 11:17:30.247158  7411 net.cpp:368] loss -> multiple-output loss
+I0208 11:17:30.247167  7411 net.cpp:368] loss -> batch-instance-counts
+I0208 11:17:30.247174  7411 net.cpp:368] loss -> train-instance-counts
+I0208 11:17:30.247181  7411 net.cpp:368] loss -> curr-b-value
+I0208 11:17:30.247189  7411 net.cpp:120] Setting up loss
+I0208 11:17:30.247203  7411 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0208 11:17:30.247207  7411 net.cpp:129]     with loss weight 1
+I0208 11:17:30.247225  7411 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0208 11:17:30.247228  7411 net.cpp:127] Top shape: 4 1 1 1 (4)
+I0208 11:17:30.247233  7411 net.cpp:127] Top shape: 1 1 1 1 (1)
+I0208 11:17:30.247236  7411 net.cpp:192] loss needs backward computation.
+I0208 11:17:30.247241  7411 net.cpp:192] 4_prob needs backward computation.
+I0208 11:17:30.247244  7411 net.cpp:192] 4_ip2 needs backward computation.
+I0208 11:17:30.247248  7411 net.cpp:192] 4_ip1 needs backward computation.
+I0208 11:17:30.247251  7411 net.cpp:192] 4_pool3 needs backward computation.
+I0208 11:17:30.247254  7411 net.cpp:192] 4_relu3 needs backward computation.
+I0208 11:17:30.247257  7411 net.cpp:192] 4_conv3 needs backward computation.
+I0208 11:17:30.247261  7411 net.cpp:192] 4_pool2 needs backward computation.
+I0208 11:17:30.247264  7411 net.cpp:192] 4_relu2 needs backward computation.
+I0208 11:17:30.247267  7411 net.cpp:192] 4_conv2 needs backward computation.
+I0208 11:17:30.247270  7411 net.cpp:192] 4_relu1 needs backward computation.
+I0208 11:17:30.247273  7411 net.cpp:192] 4_pool1 needs backward computation.
+I0208 11:17:30.247277  7411 net.cpp:192] 4_conv1 needs backward computation.
+I0208 11:17:30.247279  7411 net.cpp:192] 3_prob needs backward computation.
+I0208 11:17:30.247283  7411 net.cpp:192] 3_ip2 needs backward computation.
+I0208 11:17:30.247287  7411 net.cpp:192] 3_ip1 needs backward computation.
+I0208 11:17:30.247289  7411 net.cpp:192] 3_pool3 needs backward computation.
+I0208 11:17:30.247293  7411 net.cpp:192] 3_relu3 needs backward computation.
+I0208 11:17:30.247297  7411 net.cpp:192] 3_conv3 needs backward computation.
+I0208 11:17:30.247299  7411 net.cpp:192] 3_pool2 needs backward computation.
+I0208 11:17:30.247303  7411 net.cpp:192] 3_relu2 needs backward computation.
+I0208 11:17:30.247305  7411 net.cpp:192] 3_conv2 needs backward computation.
+I0208 11:17:30.247308  7411 net.cpp:192] 3_relu1 needs backward computation.
+I0208 11:17:30.247311  7411 net.cpp:192] 3_pool1 needs backward computation.
+I0208 11:17:30.247314  7411 net.cpp:192] 3_conv1 needs backward computation.
+I0208 11:17:30.247318  7411 net.cpp:192] 2_prob needs backward computation.
+I0208 11:17:30.247321  7411 net.cpp:192] 2_ip2 needs backward computation.
+I0208 11:17:30.247324  7411 net.cpp:192] 2_ip1 needs backward computation.
+I0208 11:17:30.247328  7411 net.cpp:192] 2_pool3 needs backward computation.
+I0208 11:17:30.247331  7411 net.cpp:192] 2_relu3 needs backward computation.
+I0208 11:17:30.247334  7411 net.cpp:192] 2_conv3 needs backward computation.
+I0208 11:17:30.247337  7411 net.cpp:192] 2_pool2 needs backward computation.
+I0208 11:17:30.247340  7411 net.cpp:192] 2_relu2 needs backward computation.
+I0208 11:17:30.247344  7411 net.cpp:192] 2_conv2 needs backward computation.
+I0208 11:17:30.247347  7411 net.cpp:192] 2_relu1 needs backward computation.
+I0208 11:17:30.247350  7411 net.cpp:192] 2_pool1 needs backward computation.
+I0208 11:17:30.247354  7411 net.cpp:192] 2_conv1 needs backward computation.
+I0208 11:17:30.247357  7411 net.cpp:192] 1_prob needs backward computation.
+I0208 11:17:30.247362  7411 net.cpp:192] 1_ip2 needs backward computation.
+I0208 11:17:30.247365  7411 net.cpp:192] 1_ip1 needs backward computation.
+I0208 11:17:30.247370  7411 net.cpp:192] 1_pool3 needs backward computation.
+I0208 11:17:30.247372  7411 net.cpp:192] 1_relu3 needs backward computation.
+I0208 11:17:30.247375  7411 net.cpp:192] 1_conv3 needs backward computation.
+I0208 11:17:30.247385  7411 net.cpp:192] 1_pool2 needs backward computation.
+I0208 11:17:30.247388  7411 net.cpp:192] 1_relu2 needs backward computation.
+I0208 11:17:30.247391  7411 net.cpp:192] 1_conv2 needs backward computation.
+I0208 11:17:30.247395  7411 net.cpp:192] 1_relu1 needs backward computation.
+I0208 11:17:30.247398  7411 net.cpp:192] 1_pool1 needs backward computation.
+I0208 11:17:30.247401  7411 net.cpp:192] 1_conv1 needs backward computation.
+I0208 11:17:30.247406  7411 net.cpp:194] data_cifar_0_split does not need backward computation.
+I0208 11:17:30.247409  7411 net.cpp:194] cifar does not need backward computation.
+I0208 11:17:30.247412  7411 net.cpp:235] This network produces output batch-instance-counts
+I0208 11:17:30.247416  7411 net.cpp:235] This network produces output curr-b-value
+I0208 11:17:30.247421  7411 net.cpp:235] This network produces output multiple-output loss
+I0208 11:17:30.247423  7411 net.cpp:235] This network produces output train-instance-counts
+I0208 11:17:30.247453  7411 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0208 11:17:30.247462  7411 net.cpp:247] Network initialization done.
+I0208 11:17:30.247464  7411 net.cpp:248] Memory required for data: 452055852
+I0208 11:17:30.248229  7411 solver.cpp:154] Creating test net (#0) specified by net file: /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/mcl_cifar10_quick_train_test.prototxt
+I0208 11:17:30.248277  7411 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer cifar
+I0208 11:17:30.248304  7411 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer loss
+I0208 11:17:30.248474  7411 net.cpp:42] Initializing net from parameters: 
+name: "CIFAR10_quick"
+state {
+  phase: TEST
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mean_file: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "/home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_test_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "1_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "1_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_pool1"
+  type: "Pooling"
+  bottom: "1_conv1"
+  top: "1_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_relu1"
+  type: "ReLU"
+  bottom: "1_pool1"
+  top: "1_pool1"
+}
+layer {
+  name: "1_conv2"
+  type: "Convolution"
+  bottom: "1_pool1"
+  top: "1_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu2"
+  type: "ReLU"
+  bottom: "1_conv2"
+  top: "1_conv2"
+}
+layer {
+  name: "1_pool2"
+  type: "Pooling"
+  bottom: "1_conv2"
+  top: "1_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_conv3"
+  type: "Convolution"
+  bottom: "1_pool2"
+  top: "1_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_relu3"
+  type: "ReLU"
+  bottom: "1_conv3"
+  top: "1_conv3"
+}
+layer {
+  name: "1_pool3"
+  type: "Pooling"
+  bottom: "1_conv3"
+  top: "1_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "1_ip1"
+  type: "InnerProduct"
+  bottom: "1_pool3"
+  top: "1_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_ip2"
+  type: "InnerProduct"
+  bottom: "1_ip1"
+  top: "1_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "1_prob"
+  type: "Softmax"
+  bottom: "1_ip2"
+  top: "1_prob"
+}
+layer {
+  name: "2_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "2_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_pool1"
+  type: "Pooling"
+  bottom: "2_conv1"
+  top: "2_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_relu1"
+  type: "ReLU"
+  bottom: "2_pool1"
+  top: "2_pool1"
+}
+layer {
+  name: "2_conv2"
+  type: "Convolution"
+  bottom: "2_pool1"
+  top: "2_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu2"
+  type: "ReLU"
+  bottom: "2_conv2"
+  top: "2_conv2"
+}
+layer {
+  name: "2_pool2"
+  type: "Pooling"
+  bottom: "2_conv2"
+  top: "2_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_conv3"
+  type: "Convolution"
+  bottom: "2_pool2"
+  top: "2_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_relu3"
+  type: "ReLU"
+  bottom: "2_conv3"
+  top: "2_conv3"
+}
+layer {
+  name: "2_pool3"
+  type: "Pooling"
+  bottom: "2_conv3"
+  top: "2_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "2_ip1"
+  type: "InnerProduct"
+  bottom: "2_pool3"
+  top: "2_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_ip2"
+  type: "InnerProduct"
+  bottom: "2_ip1"
+  top: "2_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "2_prob"
+  type: "Softmax"
+  bottom: "2_ip2"
+  top: "2_prob"
+}
+layer {
+  name: "3_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "3_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_pool1"
+  type: "Pooling"
+  bottom: "3_conv1"
+  top: "3_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_relu1"
+  type: "ReLU"
+  bottom: "3_pool1"
+  top: "3_pool1"
+}
+layer {
+  name: "3_conv2"
+  type: "Convolution"
+  bottom: "3_pool1"
+  top: "3_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu2"
+  type: "ReLU"
+  bottom: "3_conv2"
+  top: "3_conv2"
+}
+layer {
+  name: "3_pool2"
+  type: "Pooling"
+  bottom: "3_conv2"
+  top: "3_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_conv3"
+  type: "Convolution"
+  bottom: "3_pool2"
+  top: "3_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_relu3"
+  type: "ReLU"
+  bottom: "3_conv3"
+  top: "3_conv3"
+}
+layer {
+  name: "3_pool3"
+  type: "Pooling"
+  bottom: "3_conv3"
+  top: "3_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "3_ip1"
+  type: "InnerProduct"
+  bottom: "3_pool3"
+  top: "3_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_ip2"
+  type: "InnerProduct"
+  bottom: "3_ip1"
+  top: "3_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "3_prob"
+  type: "Softmax"
+  bottom: "3_ip2"
+  top: "3_prob"
+}
+layer {
+  name: "4_conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "4_conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.0001
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_pool1"
+  type: "Pooling"
+  bottom: "4_conv1"
+  top: "4_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_relu1"
+  type: "ReLU"
+  bottom: "4_pool1"
+  top: "4_pool1"
+}
+layer {
+  name: "4_conv2"
+  type: "Convolution"
+  bottom: "4_pool1"
+  top: "4_conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu2"
+  type: "ReLU"
+  bottom: "4_conv2"
+  top: "4_conv2"
+}
+layer {
+  name: "4_pool2"
+  type: "Pooling"
+  bottom: "4_conv2"
+  top: "4_pool2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_conv3"
+  type: "Convolution"
+  bottom: "4_pool2"
+  top: "4_conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_relu3"
+  type: "ReLU"
+  bottom: "4_conv3"
+  top: "4_conv3"
+}
+layer {
+  name: "4_pool3"
+  type: "Pooling"
+  bottom: "4_conv3"
+  top: "4_pool3"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "4_ip1"
+  type: "InnerProduct"
+  bottom: "4_pool3"
+  top: "4_ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_ip2"
+  type: "InnerProduct"
+  bottom: "4_ip1"
+  top: "4_ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "4_prob"
+  type: "Softmax"
+  bottom: "4_ip2"
+  top: "4_prob"
+}
+layer {
+  name: "1_accuracy"
+  type: "Accuracy"
+  bottom: "1_prob"
+  bottom: "label"
+  top: "1_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "2_accuracy"
+  type: "Accuracy"
+  bottom: "2_prob"
+  bottom: "label"
+  top: "2_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "3_accuracy"
+  type: "Accuracy"
+  bottom: "3_prob"
+  bottom: "label"
+  top: "3_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "4_accuracy"
+  type: "Accuracy"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "4_accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "accuracy"
+  type: "OracleAccuracy"
+  bottom: "1_prob"
+  bottom: "2_prob"
+  bottom: "3_prob"
+  bottom: "4_prob"
+  bottom: "label"
+  top: "oracle accuracy"
+  include {
+    phase: TEST
+  }
+}
+I0208 11:17:30.248715  7411 layer_factory.hpp:74] Creating layer cifar
+I0208 11:17:30.248723  7411 net.cpp:90] Creating Layer cifar
+I0208 11:17:30.248728  7411 net.cpp:368] cifar -> data
+I0208 11:17:30.248735  7411 net.cpp:368] cifar -> label
+I0208 11:17:30.248741  7411 net.cpp:120] Setting up cifar
+I0208 11:17:30.248770  7411 db.cpp:34] Opened lmdb /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/cifar10_test_lmdb
+I0208 11:17:30.248795  7411 data_layer.cpp:67] output data size: 100,3,32,32
+I0208 11:17:30.248800  7411 data_transformer.cpp:22] Loading mean file from: /home/mike/ml_lab/mod/MCL_Caffe/examples/cifar10/mean.binaryproto
+I0208 11:17:30.249222  7411 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0208 11:17:30.249228  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249233  7411 layer_factory.hpp:74] Creating layer data_cifar_0_split
+I0208 11:17:30.249239  7411 net.cpp:90] Creating Layer data_cifar_0_split
+I0208 11:17:30.249243  7411 net.cpp:410] data_cifar_0_split <- data
+I0208 11:17:30.249248  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_0
+I0208 11:17:30.249254  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_1
+I0208 11:17:30.249260  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_2
+I0208 11:17:30.249266  7411 net.cpp:368] data_cifar_0_split -> data_cifar_0_split_3
+I0208 11:17:30.249271  7411 net.cpp:120] Setting up data_cifar_0_split
+I0208 11:17:30.249279  7411 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0208 11:17:30.249282  7411 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0208 11:17:30.249286  7411 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0208 11:17:30.249290  7411 net.cpp:127] Top shape: 100 3 32 32 (307200)
+I0208 11:17:30.249294  7411 layer_factory.hpp:74] Creating layer label_cifar_1_split
+I0208 11:17:30.249299  7411 net.cpp:90] Creating Layer label_cifar_1_split
+I0208 11:17:30.249301  7411 net.cpp:410] label_cifar_1_split <- label
+I0208 11:17:30.249310  7411 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_0
+I0208 11:17:30.249315  7411 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_1
+I0208 11:17:30.249321  7411 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_2
+I0208 11:17:30.249327  7411 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_3
+I0208 11:17:30.249332  7411 net.cpp:368] label_cifar_1_split -> label_cifar_1_split_4
+I0208 11:17:30.249337  7411 net.cpp:120] Setting up label_cifar_1_split
+I0208 11:17:30.249343  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249347  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249351  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249356  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249358  7411 net.cpp:127] Top shape: 100 (100)
+I0208 11:17:30.249361  7411 layer_factory.hpp:74] Creating layer 1_conv1
+I0208 11:17:30.249367  7411 net.cpp:90] Creating Layer 1_conv1
+I0208 11:17:30.249371  7411 net.cpp:410] 1_conv1 <- data_cifar_0_split_0
+I0208 11:17:30.249377  7411 net.cpp:368] 1_conv1 -> 1_conv1
+I0208 11:17:30.249382  7411 net.cpp:120] Setting up 1_conv1
+I0208 11:17:30.249469  7411 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0208 11:17:30.249476  7411 layer_factory.hpp:74] Creating layer 1_pool1
+I0208 11:17:30.249482  7411 net.cpp:90] Creating Layer 1_pool1
+I0208 11:17:30.249486  7411 net.cpp:410] 1_pool1 <- 1_conv1
+I0208 11:17:30.249490  7411 net.cpp:368] 1_pool1 -> 1_pool1
+I0208 11:17:30.249496  7411 net.cpp:120] Setting up 1_pool1
+I0208 11:17:30.249502  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.249506  7411 layer_factory.hpp:74] Creating layer 1_relu1
+I0208 11:17:30.249511  7411 net.cpp:90] Creating Layer 1_relu1
+I0208 11:17:30.249513  7411 net.cpp:410] 1_relu1 <- 1_pool1
+I0208 11:17:30.249517  7411 net.cpp:357] 1_relu1 -> 1_pool1 (in-place)
+I0208 11:17:30.249522  7411 net.cpp:120] Setting up 1_relu1
+I0208 11:17:30.249536  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.249539  7411 layer_factory.hpp:74] Creating layer 1_conv2
+I0208 11:17:30.249544  7411 net.cpp:90] Creating Layer 1_conv2
+I0208 11:17:30.249547  7411 net.cpp:410] 1_conv2 <- 1_pool1
+I0208 11:17:30.249555  7411 net.cpp:368] 1_conv2 -> 1_conv2
+I0208 11:17:30.249562  7411 net.cpp:120] Setting up 1_conv2
+I0208 11:17:30.250360  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.250368  7411 layer_factory.hpp:74] Creating layer 1_relu2
+I0208 11:17:30.250373  7411 net.cpp:90] Creating Layer 1_relu2
+I0208 11:17:30.250376  7411 net.cpp:410] 1_relu2 <- 1_conv2
+I0208 11:17:30.250382  7411 net.cpp:357] 1_relu2 -> 1_conv2 (in-place)
+I0208 11:17:30.250387  7411 net.cpp:120] Setting up 1_relu2
+I0208 11:17:30.250391  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.250394  7411 layer_factory.hpp:74] Creating layer 1_pool2
+I0208 11:17:30.250401  7411 net.cpp:90] Creating Layer 1_pool2
+I0208 11:17:30.250403  7411 net.cpp:410] 1_pool2 <- 1_conv2
+I0208 11:17:30.250408  7411 net.cpp:368] 1_pool2 -> 1_pool2
+I0208 11:17:30.250413  7411 net.cpp:120] Setting up 1_pool2
+I0208 11:17:30.250419  7411 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0208 11:17:30.250422  7411 layer_factory.hpp:74] Creating layer 1_conv3
+I0208 11:17:30.250428  7411 net.cpp:90] Creating Layer 1_conv3
+I0208 11:17:30.250432  7411 net.cpp:410] 1_conv3 <- 1_pool2
+I0208 11:17:30.250437  7411 net.cpp:368] 1_conv3 -> 1_conv3
+I0208 11:17:30.250442  7411 net.cpp:120] Setting up 1_conv3
+I0208 11:17:30.251721  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.251730  7411 layer_factory.hpp:74] Creating layer 1_relu3
+I0208 11:17:30.251735  7411 net.cpp:90] Creating Layer 1_relu3
+I0208 11:17:30.251739  7411 net.cpp:410] 1_relu3 <- 1_conv3
+I0208 11:17:30.251744  7411 net.cpp:357] 1_relu3 -> 1_conv3 (in-place)
+I0208 11:17:30.251747  7411 net.cpp:120] Setting up 1_relu3
+I0208 11:17:30.251752  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.251756  7411 layer_factory.hpp:74] Creating layer 1_pool3
+I0208 11:17:30.251760  7411 net.cpp:90] Creating Layer 1_pool3
+I0208 11:17:30.251765  7411 net.cpp:410] 1_pool3 <- 1_conv3
+I0208 11:17:30.251770  7411 net.cpp:368] 1_pool3 -> 1_pool3
+I0208 11:17:30.251777  7411 net.cpp:120] Setting up 1_pool3
+I0208 11:17:30.251783  7411 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0208 11:17:30.251790  7411 layer_factory.hpp:74] Creating layer 1_ip1
+I0208 11:17:30.251796  7411 net.cpp:90] Creating Layer 1_ip1
+I0208 11:17:30.251801  7411 net.cpp:410] 1_ip1 <- 1_pool3
+I0208 11:17:30.251806  7411 net.cpp:368] 1_ip1 -> 1_ip1
+I0208 11:17:30.251811  7411 net.cpp:120] Setting up 1_ip1
+I0208 11:17:30.253293  7411 net.cpp:127] Top shape: 100 64 (6400)
+I0208 11:17:30.253299  7411 layer_factory.hpp:74] Creating layer 1_ip2
+I0208 11:17:30.253305  7411 net.cpp:90] Creating Layer 1_ip2
+I0208 11:17:30.253309  7411 net.cpp:410] 1_ip2 <- 1_ip1
+I0208 11:17:30.253315  7411 net.cpp:368] 1_ip2 -> 1_ip2
+I0208 11:17:30.253321  7411 net.cpp:120] Setting up 1_ip2
+I0208 11:17:30.253348  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.253356  7411 layer_factory.hpp:74] Creating layer 1_prob
+I0208 11:17:30.253361  7411 net.cpp:90] Creating Layer 1_prob
+I0208 11:17:30.253365  7411 net.cpp:410] 1_prob <- 1_ip2
+I0208 11:17:30.253372  7411 net.cpp:368] 1_prob -> 1_prob
+I0208 11:17:30.253377  7411 net.cpp:120] Setting up 1_prob
+I0208 11:17:30.253384  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.253389  7411 layer_factory.hpp:74] Creating layer 1_prob_1_prob_0_split
+I0208 11:17:30.253393  7411 net.cpp:90] Creating Layer 1_prob_1_prob_0_split
+I0208 11:17:30.253396  7411 net.cpp:410] 1_prob_1_prob_0_split <- 1_prob
+I0208 11:17:30.253402  7411 net.cpp:368] 1_prob_1_prob_0_split -> 1_prob_1_prob_0_split_0
+I0208 11:17:30.253408  7411 net.cpp:368] 1_prob_1_prob_0_split -> 1_prob_1_prob_0_split_1
+I0208 11:17:30.253414  7411 net.cpp:120] Setting up 1_prob_1_prob_0_split
+I0208 11:17:30.253419  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.253432  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.253437  7411 layer_factory.hpp:74] Creating layer 2_conv1
+I0208 11:17:30.253445  7411 net.cpp:90] Creating Layer 2_conv1
+I0208 11:17:30.253450  7411 net.cpp:410] 2_conv1 <- data_cifar_0_split_1
+I0208 11:17:30.253456  7411 net.cpp:368] 2_conv1 -> 2_conv1
+I0208 11:17:30.253463  7411 net.cpp:120] Setting up 2_conv1
+I0208 11:17:30.253530  7411 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0208 11:17:30.253536  7411 layer_factory.hpp:74] Creating layer 2_pool1
+I0208 11:17:30.253542  7411 net.cpp:90] Creating Layer 2_pool1
+I0208 11:17:30.253546  7411 net.cpp:410] 2_pool1 <- 2_conv1
+I0208 11:17:30.253551  7411 net.cpp:368] 2_pool1 -> 2_pool1
+I0208 11:17:30.253556  7411 net.cpp:120] Setting up 2_pool1
+I0208 11:17:30.253563  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.253567  7411 layer_factory.hpp:74] Creating layer 2_relu1
+I0208 11:17:30.253571  7411 net.cpp:90] Creating Layer 2_relu1
+I0208 11:17:30.253576  7411 net.cpp:410] 2_relu1 <- 2_pool1
+I0208 11:17:30.253579  7411 net.cpp:357] 2_relu1 -> 2_pool1 (in-place)
+I0208 11:17:30.253584  7411 net.cpp:120] Setting up 2_relu1
+I0208 11:17:30.253588  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.253592  7411 layer_factory.hpp:74] Creating layer 2_conv2
+I0208 11:17:30.253597  7411 net.cpp:90] Creating Layer 2_conv2
+I0208 11:17:30.253600  7411 net.cpp:410] 2_conv2 <- 2_pool1
+I0208 11:17:30.253607  7411 net.cpp:368] 2_conv2 -> 2_conv2
+I0208 11:17:30.253612  7411 net.cpp:120] Setting up 2_conv2
+I0208 11:17:30.254196  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.254204  7411 layer_factory.hpp:74] Creating layer 2_relu2
+I0208 11:17:30.254209  7411 net.cpp:90] Creating Layer 2_relu2
+I0208 11:17:30.254211  7411 net.cpp:410] 2_relu2 <- 2_conv2
+I0208 11:17:30.254217  7411 net.cpp:357] 2_relu2 -> 2_conv2 (in-place)
+I0208 11:17:30.254222  7411 net.cpp:120] Setting up 2_relu2
+I0208 11:17:30.254227  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.254230  7411 layer_factory.hpp:74] Creating layer 2_pool2
+I0208 11:17:30.254235  7411 net.cpp:90] Creating Layer 2_pool2
+I0208 11:17:30.254238  7411 net.cpp:410] 2_pool2 <- 2_conv2
+I0208 11:17:30.254242  7411 net.cpp:368] 2_pool2 -> 2_pool2
+I0208 11:17:30.254248  7411 net.cpp:120] Setting up 2_pool2
+I0208 11:17:30.254256  7411 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0208 11:17:30.254259  7411 layer_factory.hpp:74] Creating layer 2_conv3
+I0208 11:17:30.254264  7411 net.cpp:90] Creating Layer 2_conv3
+I0208 11:17:30.254267  7411 net.cpp:410] 2_conv3 <- 2_pool2
+I0208 11:17:30.254272  7411 net.cpp:368] 2_conv3 -> 2_conv3
+I0208 11:17:30.254278  7411 net.cpp:120] Setting up 2_conv3
+I0208 11:17:30.255450  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.255456  7411 layer_factory.hpp:74] Creating layer 2_relu3
+I0208 11:17:30.255462  7411 net.cpp:90] Creating Layer 2_relu3
+I0208 11:17:30.255466  7411 net.cpp:410] 2_relu3 <- 2_conv3
+I0208 11:17:30.255471  7411 net.cpp:357] 2_relu3 -> 2_conv3 (in-place)
+I0208 11:17:30.255476  7411 net.cpp:120] Setting up 2_relu3
+I0208 11:17:30.255481  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.255484  7411 layer_factory.hpp:74] Creating layer 2_pool3
+I0208 11:17:30.255488  7411 net.cpp:90] Creating Layer 2_pool3
+I0208 11:17:30.255491  7411 net.cpp:410] 2_pool3 <- 2_conv3
+I0208 11:17:30.255496  7411 net.cpp:368] 2_pool3 -> 2_pool3
+I0208 11:17:30.255502  7411 net.cpp:120] Setting up 2_pool3
+I0208 11:17:30.255507  7411 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0208 11:17:30.255511  7411 layer_factory.hpp:74] Creating layer 2_ip1
+I0208 11:17:30.255518  7411 net.cpp:90] Creating Layer 2_ip1
+I0208 11:17:30.255522  7411 net.cpp:410] 2_ip1 <- 2_pool3
+I0208 11:17:30.255528  7411 net.cpp:368] 2_ip1 -> 2_ip1
+I0208 11:17:30.255534  7411 net.cpp:120] Setting up 2_ip1
+I0208 11:17:30.257035  7411 net.cpp:127] Top shape: 100 64 (6400)
+I0208 11:17:30.257045  7411 layer_factory.hpp:74] Creating layer 2_ip2
+I0208 11:17:30.257051  7411 net.cpp:90] Creating Layer 2_ip2
+I0208 11:17:30.257062  7411 net.cpp:410] 2_ip2 <- 2_ip1
+I0208 11:17:30.257071  7411 net.cpp:368] 2_ip2 -> 2_ip2
+I0208 11:17:30.257077  7411 net.cpp:120] Setting up 2_ip2
+I0208 11:17:30.257112  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.257119  7411 layer_factory.hpp:74] Creating layer 2_prob
+I0208 11:17:30.257124  7411 net.cpp:90] Creating Layer 2_prob
+I0208 11:17:30.257128  7411 net.cpp:410] 2_prob <- 2_ip2
+I0208 11:17:30.257133  7411 net.cpp:368] 2_prob -> 2_prob
+I0208 11:17:30.257139  7411 net.cpp:120] Setting up 2_prob
+I0208 11:17:30.257146  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.257149  7411 layer_factory.hpp:74] Creating layer 2_prob_2_prob_0_split
+I0208 11:17:30.257156  7411 net.cpp:90] Creating Layer 2_prob_2_prob_0_split
+I0208 11:17:30.257160  7411 net.cpp:410] 2_prob_2_prob_0_split <- 2_prob
+I0208 11:17:30.257165  7411 net.cpp:368] 2_prob_2_prob_0_split -> 2_prob_2_prob_0_split_0
+I0208 11:17:30.257171  7411 net.cpp:368] 2_prob_2_prob_0_split -> 2_prob_2_prob_0_split_1
+I0208 11:17:30.257179  7411 net.cpp:120] Setting up 2_prob_2_prob_0_split
+I0208 11:17:30.257187  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.257192  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.257195  7411 layer_factory.hpp:74] Creating layer 3_conv1
+I0208 11:17:30.257201  7411 net.cpp:90] Creating Layer 3_conv1
+I0208 11:17:30.257205  7411 net.cpp:410] 3_conv1 <- data_cifar_0_split_2
+I0208 11:17:30.257212  7411 net.cpp:368] 3_conv1 -> 3_conv1
+I0208 11:17:30.257218  7411 net.cpp:120] Setting up 3_conv1
+I0208 11:17:30.257287  7411 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0208 11:17:30.257293  7411 layer_factory.hpp:74] Creating layer 3_pool1
+I0208 11:17:30.257300  7411 net.cpp:90] Creating Layer 3_pool1
+I0208 11:17:30.257303  7411 net.cpp:410] 3_pool1 <- 3_conv1
+I0208 11:17:30.257308  7411 net.cpp:368] 3_pool1 -> 3_pool1
+I0208 11:17:30.257314  7411 net.cpp:120] Setting up 3_pool1
+I0208 11:17:30.257321  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.257325  7411 layer_factory.hpp:74] Creating layer 3_relu1
+I0208 11:17:30.257329  7411 net.cpp:90] Creating Layer 3_relu1
+I0208 11:17:30.257333  7411 net.cpp:410] 3_relu1 <- 3_pool1
+I0208 11:17:30.257338  7411 net.cpp:357] 3_relu1 -> 3_pool1 (in-place)
+I0208 11:17:30.257342  7411 net.cpp:120] Setting up 3_relu1
+I0208 11:17:30.257347  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.257350  7411 layer_factory.hpp:74] Creating layer 3_conv2
+I0208 11:17:30.257359  7411 net.cpp:90] Creating Layer 3_conv2
+I0208 11:17:30.257364  7411 net.cpp:410] 3_conv2 <- 3_pool1
+I0208 11:17:30.257369  7411 net.cpp:368] 3_conv2 -> 3_conv2
+I0208 11:17:30.257375  7411 net.cpp:120] Setting up 3_conv2
+I0208 11:17:30.257975  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.257982  7411 layer_factory.hpp:74] Creating layer 3_relu2
+I0208 11:17:30.257987  7411 net.cpp:90] Creating Layer 3_relu2
+I0208 11:17:30.257989  7411 net.cpp:410] 3_relu2 <- 3_conv2
+I0208 11:17:30.257995  7411 net.cpp:357] 3_relu2 -> 3_conv2 (in-place)
+I0208 11:17:30.258000  7411 net.cpp:120] Setting up 3_relu2
+I0208 11:17:30.258005  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.258008  7411 layer_factory.hpp:74] Creating layer 3_pool2
+I0208 11:17:30.258013  7411 net.cpp:90] Creating Layer 3_pool2
+I0208 11:17:30.258016  7411 net.cpp:410] 3_pool2 <- 3_conv2
+I0208 11:17:30.258023  7411 net.cpp:368] 3_pool2 -> 3_pool2
+I0208 11:17:30.258028  7411 net.cpp:120] Setting up 3_pool2
+I0208 11:17:30.258033  7411 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0208 11:17:30.258038  7411 layer_factory.hpp:74] Creating layer 3_conv3
+I0208 11:17:30.258043  7411 net.cpp:90] Creating Layer 3_conv3
+I0208 11:17:30.258045  7411 net.cpp:410] 3_conv3 <- 3_pool2
+I0208 11:17:30.258052  7411 net.cpp:368] 3_conv3 -> 3_conv3
+I0208 11:17:30.258057  7411 net.cpp:120] Setting up 3_conv3
+I0208 11:17:30.259217  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.259222  7411 layer_factory.hpp:74] Creating layer 3_relu3
+I0208 11:17:30.259238  7411 net.cpp:90] Creating Layer 3_relu3
+I0208 11:17:30.259241  7411 net.cpp:410] 3_relu3 <- 3_conv3
+I0208 11:17:30.259246  7411 net.cpp:357] 3_relu3 -> 3_conv3 (in-place)
+I0208 11:17:30.259251  7411 net.cpp:120] Setting up 3_relu3
+I0208 11:17:30.259258  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.259260  7411 layer_factory.hpp:74] Creating layer 3_pool3
+I0208 11:17:30.259264  7411 net.cpp:90] Creating Layer 3_pool3
+I0208 11:17:30.259268  7411 net.cpp:410] 3_pool3 <- 3_conv3
+I0208 11:17:30.259274  7411 net.cpp:368] 3_pool3 -> 3_pool3
+I0208 11:17:30.259279  7411 net.cpp:120] Setting up 3_pool3
+I0208 11:17:30.259286  7411 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0208 11:17:30.259289  7411 layer_factory.hpp:74] Creating layer 3_ip1
+I0208 11:17:30.259294  7411 net.cpp:90] Creating Layer 3_ip1
+I0208 11:17:30.259299  7411 net.cpp:410] 3_ip1 <- 3_pool3
+I0208 11:17:30.259305  7411 net.cpp:368] 3_ip1 -> 3_ip1
+I0208 11:17:30.259311  7411 net.cpp:120] Setting up 3_ip1
+I0208 11:17:30.260787  7411 net.cpp:127] Top shape: 100 64 (6400)
+I0208 11:17:30.260794  7411 layer_factory.hpp:74] Creating layer 3_ip2
+I0208 11:17:30.260802  7411 net.cpp:90] Creating Layer 3_ip2
+I0208 11:17:30.260804  7411 net.cpp:410] 3_ip2 <- 3_ip1
+I0208 11:17:30.260812  7411 net.cpp:368] 3_ip2 -> 3_ip2
+I0208 11:17:30.260818  7411 net.cpp:120] Setting up 3_ip2
+I0208 11:17:30.260843  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.260848  7411 layer_factory.hpp:74] Creating layer 3_prob
+I0208 11:17:30.260854  7411 net.cpp:90] Creating Layer 3_prob
+I0208 11:17:30.260856  7411 net.cpp:410] 3_prob <- 3_ip2
+I0208 11:17:30.260861  7411 net.cpp:368] 3_prob -> 3_prob
+I0208 11:17:30.260866  7411 net.cpp:120] Setting up 3_prob
+I0208 11:17:30.260874  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.260877  7411 layer_factory.hpp:74] Creating layer 3_prob_3_prob_0_split
+I0208 11:17:30.260882  7411 net.cpp:90] Creating Layer 3_prob_3_prob_0_split
+I0208 11:17:30.260886  7411 net.cpp:410] 3_prob_3_prob_0_split <- 3_prob
+I0208 11:17:30.260891  7411 net.cpp:368] 3_prob_3_prob_0_split -> 3_prob_3_prob_0_split_0
+I0208 11:17:30.260896  7411 net.cpp:368] 3_prob_3_prob_0_split -> 3_prob_3_prob_0_split_1
+I0208 11:17:30.260902  7411 net.cpp:120] Setting up 3_prob_3_prob_0_split
+I0208 11:17:30.260910  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.260913  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.260917  7411 layer_factory.hpp:74] Creating layer 4_conv1
+I0208 11:17:30.260922  7411 net.cpp:90] Creating Layer 4_conv1
+I0208 11:17:30.260926  7411 net.cpp:410] 4_conv1 <- data_cifar_0_split_3
+I0208 11:17:30.260933  7411 net.cpp:368] 4_conv1 -> 4_conv1
+I0208 11:17:30.260939  7411 net.cpp:120] Setting up 4_conv1
+I0208 11:17:30.261008  7411 net.cpp:127] Top shape: 100 32 32 32 (3276800)
+I0208 11:17:30.261013  7411 layer_factory.hpp:74] Creating layer 4_pool1
+I0208 11:17:30.261018  7411 net.cpp:90] Creating Layer 4_pool1
+I0208 11:17:30.261021  7411 net.cpp:410] 4_pool1 <- 4_conv1
+I0208 11:17:30.261029  7411 net.cpp:368] 4_pool1 -> 4_pool1
+I0208 11:17:30.261034  7411 net.cpp:120] Setting up 4_pool1
+I0208 11:17:30.261040  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.261044  7411 layer_factory.hpp:74] Creating layer 4_relu1
+I0208 11:17:30.261049  7411 net.cpp:90] Creating Layer 4_relu1
+I0208 11:17:30.261052  7411 net.cpp:410] 4_relu1 <- 4_pool1
+I0208 11:17:30.261056  7411 net.cpp:357] 4_relu1 -> 4_pool1 (in-place)
+I0208 11:17:30.261061  7411 net.cpp:120] Setting up 4_relu1
+I0208 11:17:30.261066  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.261070  7411 layer_factory.hpp:74] Creating layer 4_conv2
+I0208 11:17:30.261075  7411 net.cpp:90] Creating Layer 4_conv2
+I0208 11:17:30.261077  7411 net.cpp:410] 4_conv2 <- 4_pool1
+I0208 11:17:30.261082  7411 net.cpp:368] 4_conv2 -> 4_conv2
+I0208 11:17:30.261088  7411 net.cpp:120] Setting up 4_conv2
+I0208 11:17:30.261673  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.261682  7411 layer_factory.hpp:74] Creating layer 4_relu2
+I0208 11:17:30.261696  7411 net.cpp:90] Creating Layer 4_relu2
+I0208 11:17:30.261703  7411 net.cpp:410] 4_relu2 <- 4_conv2
+I0208 11:17:30.261711  7411 net.cpp:357] 4_relu2 -> 4_conv2 (in-place)
+I0208 11:17:30.261718  7411 net.cpp:120] Setting up 4_relu2
+I0208 11:17:30.261723  7411 net.cpp:127] Top shape: 100 32 16 16 (819200)
+I0208 11:17:30.261726  7411 layer_factory.hpp:74] Creating layer 4_pool2
+I0208 11:17:30.261731  7411 net.cpp:90] Creating Layer 4_pool2
+I0208 11:17:30.261734  7411 net.cpp:410] 4_pool2 <- 4_conv2
+I0208 11:17:30.261739  7411 net.cpp:368] 4_pool2 -> 4_pool2
+I0208 11:17:30.261746  7411 net.cpp:120] Setting up 4_pool2
+I0208 11:17:30.261752  7411 net.cpp:127] Top shape: 100 32 8 8 (204800)
+I0208 11:17:30.261756  7411 layer_factory.hpp:74] Creating layer 4_conv3
+I0208 11:17:30.261761  7411 net.cpp:90] Creating Layer 4_conv3
+I0208 11:17:30.261765  7411 net.cpp:410] 4_conv3 <- 4_pool2
+I0208 11:17:30.261771  7411 net.cpp:368] 4_conv3 -> 4_conv3
+I0208 11:17:30.261777  7411 net.cpp:120] Setting up 4_conv3
+I0208 11:17:30.262931  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.262939  7411 layer_factory.hpp:74] Creating layer 4_relu3
+I0208 11:17:30.262944  7411 net.cpp:90] Creating Layer 4_relu3
+I0208 11:17:30.262948  7411 net.cpp:410] 4_relu3 <- 4_conv3
+I0208 11:17:30.262951  7411 net.cpp:357] 4_relu3 -> 4_conv3 (in-place)
+I0208 11:17:30.262956  7411 net.cpp:120] Setting up 4_relu3
+I0208 11:17:30.262961  7411 net.cpp:127] Top shape: 100 64 8 8 (409600)
+I0208 11:17:30.262965  7411 layer_factory.hpp:74] Creating layer 4_pool3
+I0208 11:17:30.262969  7411 net.cpp:90] Creating Layer 4_pool3
+I0208 11:17:30.262972  7411 net.cpp:410] 4_pool3 <- 4_conv3
+I0208 11:17:30.262979  7411 net.cpp:368] 4_pool3 -> 4_pool3
+I0208 11:17:30.262984  7411 net.cpp:120] Setting up 4_pool3
+I0208 11:17:30.262990  7411 net.cpp:127] Top shape: 100 64 4 4 (102400)
+I0208 11:17:30.262994  7411 layer_factory.hpp:74] Creating layer 4_ip1
+I0208 11:17:30.262998  7411 net.cpp:90] Creating Layer 4_ip1
+I0208 11:17:30.263002  7411 net.cpp:410] 4_ip1 <- 4_pool3
+I0208 11:17:30.263008  7411 net.cpp:368] 4_ip1 -> 4_ip1
+I0208 11:17:30.263015  7411 net.cpp:120] Setting up 4_ip1
+I0208 11:17:30.264515  7411 net.cpp:127] Top shape: 100 64 (6400)
+I0208 11:17:30.264523  7411 layer_factory.hpp:74] Creating layer 4_ip2
+I0208 11:17:30.264529  7411 net.cpp:90] Creating Layer 4_ip2
+I0208 11:17:30.264533  7411 net.cpp:410] 4_ip2 <- 4_ip1
+I0208 11:17:30.264539  7411 net.cpp:368] 4_ip2 -> 4_ip2
+I0208 11:17:30.264546  7411 net.cpp:120] Setting up 4_ip2
+I0208 11:17:30.264572  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.264578  7411 layer_factory.hpp:74] Creating layer 4_prob
+I0208 11:17:30.264585  7411 net.cpp:90] Creating Layer 4_prob
+I0208 11:17:30.264587  7411 net.cpp:410] 4_prob <- 4_ip2
+I0208 11:17:30.264592  7411 net.cpp:368] 4_prob -> 4_prob
+I0208 11:17:30.264598  7411 net.cpp:120] Setting up 4_prob
+I0208 11:17:30.264605  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.264608  7411 layer_factory.hpp:74] Creating layer 4_prob_4_prob_0_split
+I0208 11:17:30.264612  7411 net.cpp:90] Creating Layer 4_prob_4_prob_0_split
+I0208 11:17:30.264616  7411 net.cpp:410] 4_prob_4_prob_0_split <- 4_prob
+I0208 11:17:30.264621  7411 net.cpp:368] 4_prob_4_prob_0_split -> 4_prob_4_prob_0_split_0
+I0208 11:17:30.264627  7411 net.cpp:368] 4_prob_4_prob_0_split -> 4_prob_4_prob_0_split_1
+I0208 11:17:30.264632  7411 net.cpp:120] Setting up 4_prob_4_prob_0_split
+I0208 11:17:30.264638  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.264642  7411 net.cpp:127] Top shape: 100 10 (1000)
+I0208 11:17:30.264647  7411 layer_factory.hpp:74] Creating layer 1_accuracy
+I0208 11:17:30.264652  7411 net.cpp:90] Creating Layer 1_accuracy
+I0208 11:17:30.264657  7411 net.cpp:410] 1_accuracy <- 1_prob_1_prob_0_split_0
+I0208 11:17:30.264660  7411 net.cpp:410] 1_accuracy <- label_cifar_1_split_0
+I0208 11:17:30.264665  7411 net.cpp:368] 1_accuracy -> 1_accuracy
+I0208 11:17:30.264672  7411 net.cpp:120] Setting up 1_accuracy
+I0208 11:17:30.264679  7411 net.cpp:127] Top shape: (1)
+I0208 11:17:30.264689  7411 layer_factory.hpp:74] Creating layer 2_accuracy
+I0208 11:17:30.264695  7411 net.cpp:90] Creating Layer 2_accuracy
+I0208 11:17:30.264699  7411 net.cpp:410] 2_accuracy <- 2_prob_2_prob_0_split_0
+I0208 11:17:30.264703  7411 net.cpp:410] 2_accuracy <- label_cifar_1_split_1
+I0208 11:17:30.264713  7411 net.cpp:368] 2_accuracy -> 2_accuracy
+I0208 11:17:30.264717  7411 net.cpp:120] Setting up 2_accuracy
+I0208 11:17:30.264722  7411 net.cpp:127] Top shape: (1)
+I0208 11:17:30.264726  7411 layer_factory.hpp:74] Creating layer 3_accuracy
+I0208 11:17:30.264730  7411 net.cpp:90] Creating Layer 3_accuracy
+I0208 11:17:30.264734  7411 net.cpp:410] 3_accuracy <- 3_prob_3_prob_0_split_0
+I0208 11:17:30.264739  7411 net.cpp:410] 3_accuracy <- label_cifar_1_split_2
+I0208 11:17:30.264745  7411 net.cpp:368] 3_accuracy -> 3_accuracy
+I0208 11:17:30.264750  7411 net.cpp:120] Setting up 3_accuracy
+I0208 11:17:30.264755  7411 net.cpp:127] Top shape: (1)
+I0208 11:17:30.264758  7411 layer_factory.hpp:74] Creating layer 4_accuracy
+I0208 11:17:30.264763  7411 net.cpp:90] Creating Layer 4_accuracy
+I0208 11:17:30.264766  7411 net.cpp:410] 4_accuracy <- 4_prob_4_prob_0_split_0
+I0208 11:17:30.264770  7411 net.cpp:410] 4_accuracy <- label_cifar_1_split_3
+I0208 11:17:30.264775  7411 net.cpp:368] 4_accuracy -> 4_accuracy
+I0208 11:17:30.264780  7411 net.cpp:120] Setting up 4_accuracy
+I0208 11:17:30.264786  7411 net.cpp:127] Top shape: (1)
+I0208 11:17:30.264788  7411 layer_factory.hpp:74] Creating layer accuracy
+I0208 11:17:30.264794  7411 net.cpp:90] Creating Layer accuracy
+I0208 11:17:30.264798  7411 net.cpp:410] accuracy <- 1_prob_1_prob_0_split_1
+I0208 11:17:30.264802  7411 net.cpp:410] accuracy <- 2_prob_2_prob_0_split_1
+I0208 11:17:30.264806  7411 net.cpp:410] accuracy <- 3_prob_3_prob_0_split_1
+I0208 11:17:30.264811  7411 net.cpp:410] accuracy <- 4_prob_4_prob_0_split_1
+I0208 11:17:30.264813  7411 net.cpp:410] accuracy <- label_cifar_1_split_4
+I0208 11:17:30.264820  7411 net.cpp:368] accuracy -> oracle accuracy
+I0208 11:17:30.264825  7411 net.cpp:120] Setting up accuracy
+I0208 11:17:30.264832  7411 net.cpp:127] Top shape: (1)
+I0208 11:17:30.264835  7411 net.cpp:194] accuracy does not need backward computation.
+I0208 11:17:30.264840  7411 net.cpp:194] 4_accuracy does not need backward computation.
+I0208 11:17:30.264843  7411 net.cpp:194] 3_accuracy does not need backward computation.
+I0208 11:17:30.264847  7411 net.cpp:194] 2_accuracy does not need backward computation.
+I0208 11:17:30.264852  7411 net.cpp:194] 1_accuracy does not need backward computation.
+I0208 11:17:30.264855  7411 net.cpp:194] 4_prob_4_prob_0_split does not need backward computation.
+I0208 11:17:30.264858  7411 net.cpp:194] 4_prob does not need backward computation.
+I0208 11:17:30.264863  7411 net.cpp:194] 4_ip2 does not need backward computation.
+I0208 11:17:30.264865  7411 net.cpp:194] 4_ip1 does not need backward computation.
+I0208 11:17:30.264868  7411 net.cpp:194] 4_pool3 does not need backward computation.
+I0208 11:17:30.264873  7411 net.cpp:194] 4_relu3 does not need backward computation.
+I0208 11:17:30.264875  7411 net.cpp:194] 4_conv3 does not need backward computation.
+I0208 11:17:30.264878  7411 net.cpp:194] 4_pool2 does not need backward computation.
+I0208 11:17:30.264881  7411 net.cpp:194] 4_relu2 does not need backward computation.
+I0208 11:17:30.264885  7411 net.cpp:194] 4_conv2 does not need backward computation.
+I0208 11:17:30.264889  7411 net.cpp:194] 4_relu1 does not need backward computation.
+I0208 11:17:30.264891  7411 net.cpp:194] 4_pool1 does not need backward computation.
+I0208 11:17:30.264894  7411 net.cpp:194] 4_conv1 does not need backward computation.
+I0208 11:17:30.264899  7411 net.cpp:194] 3_prob_3_prob_0_split does not need backward computation.
+I0208 11:17:30.264901  7411 net.cpp:194] 3_prob does not need backward computation.
+I0208 11:17:30.264904  7411 net.cpp:194] 3_ip2 does not need backward computation.
+I0208 11:17:30.264907  7411 net.cpp:194] 3_ip1 does not need backward computation.
+I0208 11:17:30.264911  7411 net.cpp:194] 3_pool3 does not need backward computation.
+I0208 11:17:30.264920  7411 net.cpp:194] 3_relu3 does not need backward computation.
+I0208 11:17:30.264925  7411 net.cpp:194] 3_conv3 does not need backward computation.
+I0208 11:17:30.264927  7411 net.cpp:194] 3_pool2 does not need backward computation.
+I0208 11:17:30.264930  7411 net.cpp:194] 3_relu2 does not need backward computation.
+I0208 11:17:30.264935  7411 net.cpp:194] 3_conv2 does not need backward computation.
+I0208 11:17:30.264938  7411 net.cpp:194] 3_relu1 does not need backward computation.
+I0208 11:17:30.264941  7411 net.cpp:194] 3_pool1 does not need backward computation.
+I0208 11:17:30.264945  7411 net.cpp:194] 3_conv1 does not need backward computation.
+I0208 11:17:30.264947  7411 net.cpp:194] 2_prob_2_prob_0_split does not need backward computation.
+I0208 11:17:30.264951  7411 net.cpp:194] 2_prob does not need backward computation.
+I0208 11:17:30.264955  7411 net.cpp:194] 2_ip2 does not need backward computation.
+I0208 11:17:30.264957  7411 net.cpp:194] 2_ip1 does not need backward computation.
+I0208 11:17:30.264961  7411 net.cpp:194] 2_pool3 does not need backward computation.
+I0208 11:17:30.264964  7411 net.cpp:194] 2_relu3 does not need backward computation.
+I0208 11:17:30.264967  7411 net.cpp:194] 2_conv3 does not need backward computation.
+I0208 11:17:30.264971  7411 net.cpp:194] 2_pool2 does not need backward computation.
+I0208 11:17:30.264973  7411 net.cpp:194] 2_relu2 does not need backward computation.
+I0208 11:17:30.264976  7411 net.cpp:194] 2_conv2 does not need backward computation.
+I0208 11:17:30.264979  7411 net.cpp:194] 2_relu1 does not need backward computation.
+I0208 11:17:30.264982  7411 net.cpp:194] 2_pool1 does not need backward computation.
+I0208 11:17:30.264986  7411 net.cpp:194] 2_conv1 does not need backward computation.
+I0208 11:17:30.264989  7411 net.cpp:194] 1_prob_1_prob_0_split does not need backward computation.
+I0208 11:17:30.264993  7411 net.cpp:194] 1_prob does not need backward computation.
+I0208 11:17:30.264997  7411 net.cpp:194] 1_ip2 does not need backward computation.
+I0208 11:17:30.264999  7411 net.cpp:194] 1_ip1 does not need backward computation.
+I0208 11:17:30.265002  7411 net.cpp:194] 1_pool3 does not need backward computation.
+I0208 11:17:30.265007  7411 net.cpp:194] 1_relu3 does not need backward computation.
+I0208 11:17:30.265009  7411 net.cpp:194] 1_conv3 does not need backward computation.
+I0208 11:17:30.265012  7411 net.cpp:194] 1_pool2 does not need backward computation.
+I0208 11:17:30.265015  7411 net.cpp:194] 1_relu2 does not need backward computation.
+I0208 11:17:30.265018  7411 net.cpp:194] 1_conv2 does not need backward computation.
+I0208 11:17:30.265022  7411 net.cpp:194] 1_relu1 does not need backward computation.
+I0208 11:17:30.265025  7411 net.cpp:194] 1_pool1 does not need backward computation.
+I0208 11:17:30.265028  7411 net.cpp:194] 1_conv1 does not need backward computation.
+I0208 11:17:30.265033  7411 net.cpp:194] label_cifar_1_split does not need backward computation.
+I0208 11:17:30.265036  7411 net.cpp:194] data_cifar_0_split does not need backward computation.
+I0208 11:17:30.265039  7411 net.cpp:194] cifar does not need backward computation.
+I0208 11:17:30.265043  7411 net.cpp:235] This network produces output 1_accuracy
+I0208 11:17:30.265046  7411 net.cpp:235] This network produces output 2_accuracy
+I0208 11:17:30.265049  7411 net.cpp:235] This network produces output 3_accuracy
+I0208 11:17:30.265053  7411 net.cpp:235] This network produces output 4_accuracy
+I0208 11:17:30.265056  7411 net.cpp:235] This network produces output oracle accuracy
+I0208 11:17:30.265091  7411 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0208 11:17:30.265100  7411 net.cpp:247] Network initialization done.
+I0208 11:17:30.265102  7411 net.cpp:248] Memory required for data: 129192820
+I0208 11:17:30.265204  7411 solver.cpp:42] Solver scaffolding done.
+I0208 11:17:30.265251  7411 caffe.cpp:126] Resuming from /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/run1/mcl_cifar10_quick_iter_4000.solverstate
+I0208 11:17:30.265264  7411 solver.cpp:225] Solving CIFAR10_quick
+I0208 11:17:30.265267  7411 solver.cpp:226] Learning Rate Policy: fixed
+I0208 11:17:30.265270  7411 solver.cpp:229] Restoring previous solver status from /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/run1/mcl_cifar10_quick_iter_4000.solverstate
+I0208 11:17:30.270517  7411 solver.cpp:582] SGDSolver: restoring history
+I0208 11:17:30.271368  7411 solver.cpp:269] Iteration 4000, Testing net (#0)
+I0208 11:17:53.895668  7411 solver.cpp:318]     Test net output #0: 1_accuracy = 0.3522
+I0208 11:17:53.895690  7411 solver.cpp:318]     Test net output #1: 2_accuracy = 0.4707
+I0208 11:17:53.895695  7411 solver.cpp:318]     Test net output #2: 3_accuracy = 0.4743
+I0208 11:17:53.895699  7411 solver.cpp:318]     Test net output #3: 4_accuracy = 0.396
+I0208 11:17:53.895704  7411 solver.cpp:318]     Test net output #4: oracle accuracy = 0.935
+I0208 11:17:56.183535  7411 solver.cpp:189] Iteration 4000, loss = 5.09307
+I0208 11:17:56.183558  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 112
+I0208 11:17:56.183564  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 146
+I0208 11:17:56.183569  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 153
+I0208 11:17:56.183573  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 118
+I0208 11:17:56.183578  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.5
+I0208 11:17:56.183584  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 1.35924 (* 1 = 1.35924 loss)
+I0208 11:17:56.183591  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 1.50686 (* 1 = 1.50686 loss)
+I0208 11:17:56.183598  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.801661 (* 1 = 0.801661 loss)
+I0208 11:17:56.183604  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 1.4253 (* 1 = 1.4253 loss)
+I0208 11:17:56.183609  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 112
+I0208 11:17:56.183612  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 146
+I0208 11:17:56.183617  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 153
+I0208 11:17:56.183621  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 118
+I0208 11:17:56.183629  7411 solver.cpp:461] Iteration 4000, lr = 0.0001
+I0208 11:21:50.306927  7411 solver.cpp:189] Iteration 4100, loss = 2.65943
+I0208 11:21:50.306987  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 110
+I0208 11:21:50.306994  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 123
+I0208 11:21:50.306999  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 159
+I0208 11:21:50.307003  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 107
+I0208 11:21:50.307008  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.452397
+I0208 11:21:50.307018  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.764093 (* 1 = 0.764093 loss)
+I0208 11:21:50.307024  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.568029 (* 1 = 0.568029 loss)
+I0208 11:21:50.307027  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.395269 (* 1 = 0.395269 loss)
+I0208 11:21:50.307030  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.93204 (* 1 = 0.93204 loss)
+I0208 11:21:50.307034  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 11582
+I0208 11:21:50.307035  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 14171
+I0208 11:21:50.307039  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 15104
+I0208 11:21:50.307040  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 11395
+I0208 11:21:50.307044  7411 solver.cpp:461] Iteration 4100, lr = 0.0001
+I0208 11:25:44.374877  7411 solver.cpp:189] Iteration 4200, loss = 2.13893
+I0208 11:25:44.374932  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 100
+I0208 11:25:44.374938  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 134
+I0208 11:25:44.374939  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 140
+I0208 11:25:44.374943  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 112
+I0208 11:25:44.374945  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.409325
+I0208 11:25:44.374950  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.536608 (* 1 = 0.536608 loss)
+I0208 11:25:44.374953  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.492736 (* 1 = 0.492736 loss)
+I0208 11:25:44.374956  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.576221 (* 1 = 0.576221 loss)
+I0208 11:25:44.374959  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.533363 (* 1 = 0.533363 loss)
+I0208 11:25:44.374963  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 22679
+I0208 11:25:44.374965  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 27231
+I0208 11:25:44.374968  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 29925
+I0208 11:25:44.374969  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 22391
+I0208 11:25:44.374974  7411 solver.cpp:461] Iteration 4200, lr = 0.0001
+I0208 11:29:32.909626  7411 solver.cpp:189] Iteration 4300, loss = 2.49648
+I0208 11:29:32.909675  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 107
+I0208 11:29:32.909682  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 126
+I0208 11:29:32.909683  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 138
+I0208 11:29:32.909687  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 94
+I0208 11:29:32.909688  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.370355
+I0208 11:29:32.909693  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.721085 (* 1 = 0.721085 loss)
+I0208 11:29:32.909698  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.506071 (* 1 = 0.506071 loss)
+I0208 11:29:32.909700  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.482751 (* 1 = 0.482751 loss)
+I0208 11:29:32.909703  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.786572 (* 1 = 0.786572 loss)
+I0208 11:29:32.909706  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 33534
+I0208 11:29:32.909708  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 40208
+I0208 11:29:32.909711  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 44162
+I0208 11:29:32.909713  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 33003
+I0208 11:29:32.909716  7411 solver.cpp:461] Iteration 4300, lr = 0.0001
+I0208 11:33:26.977134  7411 solver.cpp:189] Iteration 4400, loss = 1.65561
+I0208 11:33:26.977182  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 99
+I0208 11:33:26.977188  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 131
+I0208 11:33:26.977191  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 133
+I0208 11:33:26.977193  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 98
+I0208 11:33:26.977195  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.335095
+I0208 11:33:26.977200  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.484853 (* 1 = 0.484853 loss)
+I0208 11:33:26.977205  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.412196 (* 1 = 0.412196 loss)
+I0208 11:33:26.977207  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.412124 (* 1 = 0.412124 loss)
+I0208 11:33:26.977210  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.346439 (* 1 = 0.346439 loss)
+I0208 11:33:26.977213  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 44003
+I0208 11:33:26.977216  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 52822
+I0208 11:33:26.977218  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 57753
+I0208 11:33:26.977221  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 43556
+I0208 11:33:26.977223  7411 solver.cpp:461] Iteration 4400, lr = 0.0001
+I0208 11:37:21.084172  7411 solver.cpp:189] Iteration 4500, loss = 1.96411
+I0208 11:37:21.084254  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 100
+I0208 11:37:21.084260  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 127
+I0208 11:37:21.084264  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 140
+I0208 11:37:21.084265  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 115
+I0208 11:37:21.084269  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.303191
+I0208 11:37:21.084273  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.511257 (* 1 = 0.511257 loss)
+I0208 11:37:21.084277  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.453303 (* 1 = 0.453303 loss)
+I0208 11:37:21.084280  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.374206 (* 1 = 0.374206 loss)
+I0208 11:37:21.084283  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.625343 (* 1 = 0.625343 loss)
+I0208 11:37:21.084286  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 54258
+I0208 11:37:21.084288  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 65118
+I0208 11:37:21.084291  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 71286
+I0208 11:37:21.084293  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 53752
+I0208 11:37:21.084297  7411 solver.cpp:461] Iteration 4500, lr = 0.0001
+I0208 11:41:15.183385  7411 solver.cpp:189] Iteration 4600, loss = 1.96612
+I0208 11:41:15.183446  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 71
+I0208 11:41:15.183451  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 133
+I0208 11:41:15.183454  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 153
+I0208 11:41:15.183456  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 98
+I0208 11:41:15.183459  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.274326
+I0208 11:41:15.183465  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.609486 (* 1 = 0.609486 loss)
+I0208 11:41:15.183467  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.381207 (* 1 = 0.381207 loss)
+I0208 11:41:15.183470  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.441204 (* 1 = 0.441204 loss)
+I0208 11:41:15.183475  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.534229 (* 1 = 0.534229 loss)
+I0208 11:41:15.183476  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 64187
+I0208 11:41:15.183480  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 76958
+I0208 11:41:15.183481  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 84709
+I0208 11:41:15.183483  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 63583
+I0208 11:41:15.183487  7411 solver.cpp:461] Iteration 4600, lr = 0.0001
+I0208 11:45:09.325268  7411 solver.cpp:189] Iteration 4700, loss = 1.59961
+I0208 11:45:09.325309  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 97
+I0208 11:45:09.325314  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 108
+I0208 11:45:09.325316  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 120
+I0208 11:45:09.325319  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 113
+I0208 11:45:09.325321  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.248208
+I0208 11:45:09.325326  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.429185 (* 1 = 0.429185 loss)
+I0208 11:45:09.325330  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.273329 (* 1 = 0.273329 loss)
+I0208 11:45:09.325332  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.219815 (* 1 = 0.219815 loss)
+I0208 11:45:09.325336  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.677276 (* 1 = 0.677276 loss)
+I0208 11:45:09.325338  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 74114
+I0208 11:45:09.325341  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 88459
+I0208 11:45:09.325343  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 97868
+I0208 11:45:09.325346  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 73026
+I0208 11:45:09.325350  7411 solver.cpp:461] Iteration 4700, lr = 0.0001
+I0208 11:49:03.444500  7411 solver.cpp:189] Iteration 4800, loss = 1.53289
+I0208 11:49:03.444550  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 111
+I0208 11:49:03.444556  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 97
+I0208 11:49:03.444558  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 127
+I0208 11:49:03.444561  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 96
+I0208 11:49:03.444563  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.224577
+I0208 11:49:03.444568  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.390665 (* 1 = 0.390665 loss)
+I0208 11:49:03.444572  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.323374 (* 1 = 0.323374 loss)
+I0208 11:49:03.444576  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.399318 (* 1 = 0.399318 loss)
+I0208 11:49:03.444578  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.419538 (* 1 = 0.419538 loss)
+I0208 11:49:03.444581  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 83669
+I0208 11:49:03.444583  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 99771
+I0208 11:49:03.444586  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 110918
+I0208 11:49:03.444588  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 82212
+I0208 11:49:03.444591  7411 solver.cpp:461] Iteration 4800, lr = 0.0001
+I0208 11:52:57.576098  7411 solver.cpp:189] Iteration 4900, loss = 1.51326
+I0208 11:52:57.576140  7411 solver.cpp:204]     Train net output #0: batch-instance-counts = 89
+I0208 11:52:57.576144  7411 solver.cpp:204]     Train net output #1: batch-instance-counts = 115
+I0208 11:52:57.576148  7411 solver.cpp:204]     Train net output #2: batch-instance-counts = 129
+I0208 11:52:57.576149  7411 solver.cpp:204]     Train net output #3: batch-instance-counts = 101
+I0208 11:52:57.576153  7411 solver.cpp:204]     Train net output #4: curr-b-value = 0.203196
+I0208 11:52:57.576158  7411 solver.cpp:204]     Train net output #5: multiple-output loss = 0.507745 (* 1 = 0.507745 loss)
+I0208 11:52:57.576160  7411 solver.cpp:204]     Train net output #6: multiple-output loss = 0.360369 (* 1 = 0.360369 loss)
+I0208 11:52:57.576164  7411 solver.cpp:204]     Train net output #7: multiple-output loss = 0.305068 (* 1 = 0.305068 loss)
+I0208 11:52:57.576167  7411 solver.cpp:204]     Train net output #8: multiple-output loss = 0.340075 (* 1 = 0.340075 loss)
+I0208 11:52:57.576169  7411 solver.cpp:204]     Train net output #9: train-instance-counts = 93159
+I0208 11:52:57.576172  7411 solver.cpp:204]     Train net output #10: train-instance-counts = 110873
+I0208 11:52:57.576174  7411 solver.cpp:204]     Train net output #11: train-instance-counts = 123892
+I0208 11:52:57.576177  7411 solver.cpp:204]     Train net output #12: train-instance-counts = 91114
+I0208 11:52:57.576180  7411 solver.cpp:461] Iteration 4900, lr = 0.0001
+I0208 11:56:49.556625  7411 solver.cpp:336] Snapshotting to /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/run1/mcl_cifar10_quick_iter_5000.caffemodel
+I0208 11:56:49.611436  7411 solver.cpp:344] Snapshotting solver state to /home/mike/ml_lab/mod/MCL_Caffe/iccv_17/random_alg5/4_models/run1/mcl_cifar10_quick_iter_5000.solverstate
+I0208 11:56:50.364677  7411 solver.cpp:251] Iteration 5000, loss = 1.52487
+I0208 11:56:50.364701  7411 solver.cpp:269] Iteration 5000, Testing net (#0)
+I0208 11:57:15.901585  7411 solver.cpp:318]     Test net output #0: 1_accuracy = 0.5549
+I0208 11:57:15.901608  7411 solver.cpp:318]     Test net output #1: 2_accuracy = 0.6288
+I0208 11:57:15.901612  7411 solver.cpp:318]     Test net output #2: 3_accuracy = 0.6062
+I0208 11:57:15.901614  7411 solver.cpp:318]     Test net output #3: 4_accuracy = 0.5567
+I0208 11:57:15.901617  7411 solver.cpp:318]     Test net output #4: oracle accuracy = 0.9161
+I0208 11:57:15.901619  7411 solver.cpp:256] Optimization Done.
+I0208 11:57:15.901621  7411 caffe.cpp:134] Optimization Done.
