@@ -65,7 +65,7 @@ void ODStochasticPoolingMultinomialLogisticLossLayer<Dtype>::Forward_cpu(
   int k = this->update_k_models_.mutable_cpu_data()[0];
   float temp = this->temp_.mutable_cpu_data()[0];
   float temp_decay = this->layer_param_.odsp_param().temp_decay();
-  float min_temp = 0.1;
+  float min_temp = this->layer_param_.odsp_param().min_temp();
   
 
   Dtype* best = this->best_pred_.mutable_cpu_data();

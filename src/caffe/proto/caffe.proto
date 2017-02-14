@@ -635,6 +635,7 @@ message ODSPParameter {
   optional float temp_decay = 1 [default = 0.001];
   optional uint32 update_k_models = 2 [default = 1];
   optional float temp = 3 [default = 2];
+  optional float min_temp = 4 [default = 0.0];
 }
 
 message SequentialMCLParameter {
