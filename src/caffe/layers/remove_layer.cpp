@@ -28,9 +28,9 @@ void RemoveLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
   for (int k = 2; k < bottom[0]->num_axes(); k++) {
     top_shape.push_back(bottom[0]->shape(k));
   }
-  for (int k = 0; k < bottom[0]->num_axes(); k++) {
-    LOG(INFO) << top_shape[k];
-  }
+  //for (int k = 0; k < bottom[0]->num_axes(); k++) {
+  //  LOG(INFO) << top_shape[k];
+  //}
   top[0]->Reshape(top_shape);
 }
 
